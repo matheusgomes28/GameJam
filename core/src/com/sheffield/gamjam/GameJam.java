@@ -31,9 +31,9 @@ public class GameJam extends Game {
         
         batch.begin();
         
+        player.render(batch);
         for(Bullet b : bullets)
         	b.draw(batch);
-        player.render(batch);
         batch.end();
 	}
 }
