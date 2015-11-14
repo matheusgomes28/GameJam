@@ -16,6 +16,7 @@ public class Player {
     Vector2 pos;
     final int LEFT_BOUND, RIGHT_BOUND, UPPER_BOUND, LOWER_BOUND;
     final int BASE_SPEED = 7;
+    Gun gun;
 
     Player() {
         pos = new Vector2(200, 100);
@@ -27,10 +28,13 @@ public class Player {
         RIGHT_BOUND = SCREEN_WIDTH;
         UPPER_BOUND = SCREEN_HEIGHT;
         LOWER_BOUND = SCREEN_HEIGHT/2;
+        
+        gun = new Gun(this);
     }
 
     public void render(SpriteBatch batch) {
         batch.draw(image, pos.x, pos.y);
+        gun.gunSprite.draw(batch);
         batch.end();
         ShapeRenderer renderer = new ShapeRenderer();
     }
@@ -55,6 +59,9 @@ public class Player {
         }
 
         collideBounds();
+        
+        gun.update();
+        
     }
 
     public void collideBounds() {
