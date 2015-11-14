@@ -9,7 +9,7 @@ public class Ground{
 	
 	// Variables we need for the ground stuff
 	private float[] gColor;
-	private int height;
+	public int height;
 	private int grassHeight;
 	private ShapeRenderer s;
 	

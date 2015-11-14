@@ -8,10 +8,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameJam extends Game {
 	SpriteBatch batch;
-	Texture img;
+	ShapeRenderer shapeRenderer;
 	Ground ground;
 
     public Player player;
@@ -27,6 +29,7 @@ public class GameJam extends Game {
         player = new Player(this);
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
+        shapeRenderer = new ShapeRenderer();
 	}
 
 	@Override
@@ -37,8 +40,15 @@ public class GameJam extends Game {
 
         player.update();
 
-        for(Bullet b : bullets)
-        	b.update();
+        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext();) {
+            Bullet b = it.next();
+            b.update();
+            if (b.pos.y <= ground.height) {
+                Vector2 pos = b.pos;
+                it.remove();
+                explosions.add(new Explosion(pos.x, pos.y));
+            }
+        }
 
         batch.begin();
 
@@ -54,7 +64,7 @@ public class GameJam extends Game {
                 it.remove();
                 continue;
             }
-			e.render();
+			e.render(shapeRenderer);
 		}
 	}
 }
