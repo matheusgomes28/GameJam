@@ -34,6 +34,6 @@ public class Gun {
 		
 		double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
 		
-		gunSprite.setRotation(180 + (int)degrees);
+		gunSprite.setRotation((int)degrees);
 	}
 }
