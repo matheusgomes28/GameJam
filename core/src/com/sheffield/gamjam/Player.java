@@ -12,19 +12,21 @@ import com.badlogic.gdx.Gdx;
  * Created by Angus on 14/11/2015.
  */
 public class Player {
-    Texture image;
+	Texture image;
     Vector2 pos;
     final int LEFT_BOUND, RIGHT_BOUND, UPPER_BOUND, LOWER_BOUND;
+    final int BASE_SPEED = 7;
 
     Player() {
         pos = new Vector2(200, 100);
         image = new Texture("shipGreen.png");
         final int SCREEN_WIDTH = Gdx.graphics.getWidth();
         final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
-        LEFT_BOUND = 40;
-        RIGHT_BOUND = SCREEN_WIDTH - 40;
-        UPPER_BOUND = SCREEN_HEIGHT - 40;
-        LOWER_BOUND = 300;
+        
+        LEFT_BOUND = 0;
+        RIGHT_BOUND = SCREEN_WIDTH;
+        UPPER_BOUND = SCREEN_HEIGHT;
+        LOWER_BOUND = SCREEN_HEIGHT/2;
     }
 
     public void render(SpriteBatch batch) {
@@ -34,17 +36,22 @@ public class Player {
     }
 
     public void update() {
+    	int speed = BASE_SPEED;
+    	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT ))
+    	{
+    		speed *= 2;
+    	}
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            pos.x -= 3;//MathUtils.clamp(pos.x - 6, w / 2, screenW - w / 2);
+            pos.x -= speed;//MathUtils.clamp(pos.x - 6, w / 2, screenW - w / 2);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            pos.x += 3; //= MathUtils.clamp(x + 6, w / 2, screenW - w / 2);
+            pos.x += speed; //= MathUtils.clamp(x + 6, w / 2, screenW - w / 2);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            pos.y += 3;//MathUtils.clamp(pos.x - 6, w / 2, screenW - w / 2);
+            pos.y += speed;//MathUtils.clamp(pos.x - 6, w / 2, screenW - w / 2);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            pos.y -= 3; //= MathUtils.clamp(x + 6, w / 2, screenW - w / 2);
+            pos.y -= speed; //= MathUtils.clamp(x + 6, w / 2, screenW - w / 2);
         }
 
         collideBounds();
