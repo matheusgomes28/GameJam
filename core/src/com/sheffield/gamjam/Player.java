@@ -1,5 +1,4 @@
 package com.sheffield.gamjam;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,10 +37,9 @@ public class Player {
 
     public void update() {
     	int speed = BASE_SPEED;
-    	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT ))
-    	{
-    		speed = HIGH_SPEED;
-    	}
+    	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT )) {
+            speed = HIGH_SPEED;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             pos.x -= speed;
         }
