@@ -40,16 +40,20 @@ public class Player {
     	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT )) {
             speed = HIGH_SPEED;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+        		Gdx.input.isKeyPressed(Input.Keys.A)) {
             pos.x -= speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+        		Gdx.input.isKeyPressed(Input.Keys.D)) {
             pos.x += speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) ||
+        		Gdx.input.isKeyPressed(Input.Keys.W)) {
             pos.y += speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+        		Gdx.input.isKeyPressed(Input.Keys.S)) {
             pos.y -= speed;
         }
 

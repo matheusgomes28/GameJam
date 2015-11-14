@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,9 +42,9 @@ public class GameJam extends Game {
 
         batch.begin();
 
+        player.render(batch);
         for(Bullet b : bullets)
         	b.draw(batch);
-        player.render(batch);
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {
