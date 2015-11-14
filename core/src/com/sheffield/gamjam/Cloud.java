@@ -20,18 +20,14 @@ public class Cloud {
 		
 		Random rand = new Random();
 		int num = rand.nextInt(2);
-		if (num == 1){
-			region.setRegion(930, 1805, 203, 133);
-		}
+
 		this.x = xOffSet + Gdx.graphics.getWidth() + region.getRegionWidth()/2;
 		this.y = getY();
 	}
 	
-	// Generate random Y posiion
+	// Generate random Y position
 	private int getY(){
-		return (int) (Gdx.graphics.getHeight()/2 - 
-				region.getRegionHeight() +
-			   (Math.random()*(Gdx.graphics.getHeight() /2)));
+		return (int) (Gdx.graphics.getHeight()/2 + Math.random()*(Gdx.graphics.getHeight()/2 - region.getRegionHeight()));
 	}
 	
 	
