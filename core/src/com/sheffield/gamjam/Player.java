@@ -24,9 +24,9 @@ public class Player {
         RIGHT_BOUND = SCREEN_WIDTH;
         UPPER_BOUND = SCREEN_HEIGHT;
         LOWER_BOUND = SCREEN_HEIGHT/2;
-        
+
         game = g;
-        
+
         gun = new Gun(this);
     }
 
@@ -56,7 +56,7 @@ public class Player {
         collideBounds();
         
         gun.update();
-        
+
     }
 
     public void collideBounds() {
