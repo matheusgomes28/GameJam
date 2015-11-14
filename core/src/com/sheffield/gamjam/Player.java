@@ -40,12 +40,8 @@ public class Player {
     	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT )) {
             speed = HIGH_SPEED;
         }
-<<<<<<< HEAD
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-=======
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
         		Gdx.input.isKeyPressed(Input.Keys.A)) {
->>>>>>> refs/remotes/origin/angus
             pos.x -= speed;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||

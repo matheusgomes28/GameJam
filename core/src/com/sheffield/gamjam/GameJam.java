@@ -23,8 +23,6 @@ public class GameJam extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		// Creating ground object
-		float[] rgb = {0.5f, 1, 0.5f};
-		ground = new Ground(rgb, 100, 20);
         player = new Player(this);
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
@@ -43,8 +41,6 @@ public class GameJam extends Game {
 	public void render () {
 		Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		ground.draw();
 
         player.update();
 
