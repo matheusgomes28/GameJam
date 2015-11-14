@@ -1,6 +1,7 @@
 package com.sheffield.gamjam;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -39,9 +40,13 @@ public class GameJam extends Game {
         player.render(batch);
         batch.end();
 
-		if (e != null) {
-			if (Gdx.input.isKeyPressed(Input.Keys.R)) e.reset();
-			e.update(1.0f / 60.0f);
+        for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {
+            Explosion e = it.next();
+			boolean doDelete = e.update(1.0f / 60.0f);
+            if (doDelete) {
+                it.remove();
+                continue;
+            }
 			e.render();
 		}
 	}
