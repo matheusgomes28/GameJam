@@ -17,13 +17,10 @@ public class Explosion {
         public int framesAlive;
     }
     ArrayList<Particle> particles;
-    float centerX, centerY;
 
     Explosion(float x, float y) {
         particles = new ArrayList<Particle>();
         createParticles(x, y);
-        centerX = x;
-        centerY = y;
     }
 
     private static Color randomColor() {
@@ -65,22 +62,16 @@ public class Explosion {
                 it.remove();
             }
         }
-        if (particles.size() == 0) return false;
-        return true;
+        if (particles.size() == 0) return true;
+        return false;
     }
 
-    public void render() {
-        ShapeRenderer renderer = new ShapeRenderer();
+    public void render(ShapeRenderer renderer) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         for (Particle p: particles) {
             renderer.setColor(p.color);
             renderer.circle(p.x, p.y, p.radius);
         }
         renderer.end();
-    }
-
-    public void reset() {
-        particles.clear();
-        createParticles(centerX, centerY);
     }
 }
