@@ -3,8 +3,6 @@ package com.sheffield.gamjam;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
@@ -15,8 +13,9 @@ public class Player {
     final int BASE_SPEED = 7;
 	final int HIGH_SPEED = 14;
 	Gun gun;
+	GameJam game;
 
-    Player() {
+    Player(GameJam g) {
         pos = new Vector2(200, 100);
         image = new Texture("shipGreen.png");
         final int SCREEN_WIDTH = Gdx.graphics.getWidth();
@@ -26,6 +25,8 @@ public class Player {
         RIGHT_BOUND = SCREEN_WIDTH;
         UPPER_BOUND = SCREEN_HEIGHT;
         LOWER_BOUND = SCREEN_HEIGHT/2;
+        
+        game = g;
         
         gun = new Gun(this);
     }
