@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 100;
+	long money = 100L;
 	int rage = -1;
 	GameJam game;
 	
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
-	public int highScore = 0;
+	public long highScore = 0;
 	public int level = 1;
 
 	
@@ -152,7 +152,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.05f) - (int)(0.2*Math.pow(10, level));
+        		int tax = -(int)(money*0.05f) - (int)(0.8*Math.pow(10, level));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -273,7 +273,7 @@ public class GameScreen implements Screen {
             game.setScreen(game.loseScreen);
 
         //win condition
-        if(money > 1000000000)
+        if(false)
             game.setScreen(game.winScreen);
         
         if(money > 1000)
@@ -290,6 +290,11 @@ public class GameScreen implements Screen {
         	level = 7;
         if(money > 1000000000)
         	level = 8;
+        if(money > 10000000000L)
+        	level = 9;
+        if(money > 100000000000L)
+        	level = 10;
+        
         
     }
 
