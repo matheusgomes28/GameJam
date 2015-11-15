@@ -1,7 +1,5 @@
 package com.sheffield.gamjam;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -67,7 +65,7 @@ public class Enemy {
 				
 				Vector2 origin = game.player.pos.cpy();
 				Vector2 v = origin.sub(pos.cpy()).nor();
-				double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
+				//double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
 				Vector2 dir = v.cpy();
 				dir.nor();				
 				Vector2 gunPos = pos.cpy();				
