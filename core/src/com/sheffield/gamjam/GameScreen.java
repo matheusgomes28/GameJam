@@ -29,20 +29,23 @@ public class GameScreen implements Screen {
     public Player player;
     public ArrayList<Enemy> enemies;
     public ArrayList<Bullet> bullets;
-	ArrayList<Explosion> explosions;
+    ArrayList<Explosion> explosions;
     ArrayList<EnemyBullet> enemyBullets;
 
 	public Texture bg;
 	public Cloud[] clouds;
 	public Tree[] trees;
 	public Ground ground;
+	public float speed = 1f;
 
     ArrayList<Sound> sounds;
     Sound soundtrack;
 
+    ArrayList<Sound> exSounds;
+
 
 	private BitmapFont font12;
-	int money = 10000;
+	int money = 100;
 	int rage = -1;
 	GameJam game;
 	
@@ -54,6 +57,7 @@ public class GameScreen implements Screen {
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
 	public int highScore = 0;
+	public int level = 1;
 
 	
 	public GameScreen(GameJam g)
@@ -75,7 +79,7 @@ public class GameScreen implements Screen {
         enemies = new ArrayList<Enemy>();
         bullets = new ArrayList<Bullet>();
         enemyBullets = new ArrayList<EnemyBullet>();
-		explosions = new ArrayList<Explosion>();
+        explosions = new ArrayList<Explosion>();
 		ground = new Ground(Gdx.files.local("ground.png"));
 		
 		FreeTypeFontGenerator gen = 
@@ -109,29 +113,29 @@ public class GameScreen implements Screen {
 		// Creating enemies init
 		for(int i = 0; i<1; i++)
 			enemies.add(new Enemy(this));
-		explosions = new ArrayList<Explosion>();
 
-		explosions = new ArrayList<Explosion>();
+        exSounds = new ArrayList<Sound>();
+        exSounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/explosion1.wav")));
+        exSounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/explosion2.wav")));
+
+
 		shapeRenderer = new ShapeRenderer();
 		buildings = new ArrayList<Building>();
 
 
-        // Creating sounds
-        sounds = new ArrayList<Sound>();
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/disgustedByThePoor.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/gettingPiggyWithIt.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/iveGotLoadsOfMoney.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/readyForClassWar.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/risingFromTheBottomToTheTop.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/sellingTheNhs.ogg")));
+    // Creating sounds
+    sounds = new ArrayList<Sound>();
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/disgustedByThePoor.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/gettingPiggyWithIt.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/iveGotLoadsOfMoney.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/readyForClassWar.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/risingFromTheBottomToTheTop.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/sellingTheNhs.ogg")));
 
-        soundtrack = Gdx.audio.newSound(Gdx.files.local("sounds/soundtrack.mp3"));
-        soundtrack.loop(0.6f);
-	}
+    soundtrack = Gdx.audio.newSound(Gdx.files.local("sounds/soundtrack.mp3"));
+    soundtrack.loop(0.6f);
+}
 
-    public int get_score(){
-        return this.highScore;
-    }
 
 	@Override
 	public void render(float delta) {
@@ -148,13 +152,18 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.10f) - 20;
+        		int tax = -(int)(money*0.05f) - (int)(0.2*Math.pow(10, level));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
         	}
         }
-
+        
+        Building.speed = 7+level;
+        MoneyFly.speed = 7+level;
+        Tree.speed = (7+level)/2;
+        Cloud.speed = (7+level)/2;
+        
         loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
@@ -164,7 +173,7 @@ public class GameScreen implements Screen {
                 if (bldng.checkBoundaries(b.pos.x, b.pos.y)) {
                 	bldng.destroy();
             		it.remove();
-            		int win = (int)(Math.random()*1000);
+            		int win = (int)(Math.random()*Math.pow(10, level+1));
 
             		if(!bldng.positive)
             			win = -win;
@@ -177,6 +186,7 @@ public class GameScreen implements Screen {
             			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
 
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
+                    exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
             		continue loop;
                 }
 
@@ -184,6 +194,7 @@ public class GameScreen implements Screen {
                 Vector2 pos = b.pos;
                 it.remove();
                 explosions.add(new Explosion(pos.x, pos.y));
+                exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
             }
         }
 
@@ -196,7 +207,7 @@ public class GameScreen implements Screen {
         for (Cloud cloud : clouds) cloud.update(batch);
         for (Tree tree : trees) tree.update(batch);
 
-        Building.updateAll(buildings, batch, timeElapsed);
+        Building.updateAll(buildings, batch, timeElapsed, this);
 
         for (Bullet b : bullets)
             b.draw(batch);
@@ -212,7 +223,8 @@ public class GameScreen implements Screen {
             e.render(batch);
 
         font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
-
+        font12.draw(batch, "Level "+ level , 1000, 705);
+ 
         player.render(batch);
         
         for(MoneyFly mf : moneyFlies)
@@ -261,8 +273,24 @@ public class GameScreen implements Screen {
             game.setScreen(game.loseScreen);
 
         //win condition
-        if(money > 50000)
+        if(money > 1000000000)
             game.setScreen(game.winScreen);
+        
+        if(money > 1000)
+        	level = 2;
+        if(money > 10000)
+        	level = 3;
+        if(money > 100000)
+        	level = 4;
+        if(money > 1000000)
+        	level = 5;
+        if(money > 10000000)
+        	level = 6;
+        if(money > 100000000)
+        	level = 7;
+        if(money > 1000000000)
+        	level = 8;
+        
     }
 
 
