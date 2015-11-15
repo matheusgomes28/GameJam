@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,11 +16,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameScreen implements Screen {
 	
 	SpriteBatch batch;
+    float timeElapsed = 0;
+
 	ShapeRenderer shapeRenderer;
 
     public Player player;
@@ -33,12 +37,17 @@ public class GameScreen implements Screen {
 	public Tree[] trees;
 	public Ground ground;
 
+    ArrayList<Sound> sounds;
+    Sound soundtrack;
+
 
 	private BitmapFont font12;
 	int money = 0;
 	GameJam game;
 	
 	List<Building> buildings;
+    float time = 0; // For sound playing
+    boolean sPlaying = false;
 	
 	
 	public GameScreen(GameJam g)
@@ -48,8 +57,8 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void show() {
-		batch = new SpriteBatch();
 
+		batch = new SpriteBatch();
 
 		// Creating ground object
 		ground = new Ground(Gdx.files.local("ground.png"));
@@ -94,6 +103,19 @@ public class GameScreen implements Screen {
 		explosions = new ArrayList<Explosion>();
 		shapeRenderer = new ShapeRenderer();
 		buildings = new ArrayList<Building>();
+
+
+        // Creating sounds
+        sounds = new ArrayList<Sound>();
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/disgustedByThePoor.ogg")));
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/gettingPiggyWithIt.ogg")));
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/iveGotLoadsOfMoney.ogg")));
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/readyForClassWar.ogg")));
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/risingFromTheBottomToTheTop.ogg")));
+        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/sellingTheNhs.ogg")));
+
+        soundtrack = Gdx.audio.newSound(Gdx.files.local("sounds/soundtrack.mp3"));
+        soundtrack.loop(0.6f);
 	}
 
 	@Override
@@ -133,7 +155,7 @@ public class GameScreen implements Screen {
         for (Cloud cloud : clouds) cloud.update(batch);
         for (Tree tree : trees) tree.update(batch);
 
-        Building.updateAll(buildings, batch);
+        Building.updateAll(buildings, batch, timeElapsed);
 
         for (Bullet b : bullets)
             b.draw(batch);
@@ -162,6 +184,19 @@ public class GameScreen implements Screen {
             }
             e.render(shapeRenderer);
         }
+
+        //updating time - play every 30 secs
+        float t = Gdx.graphics.getDeltaTime();
+        timeElapsed += t;
+        time += t;
+
+
+        if((int) time % 5 == 0 && sPlaying == false){
+            time += 1;
+            sounds.get(MathUtils.random(0, sounds.size()-1)).play();
+            sPlaying = true;
+        }
+        else sPlaying = false;
     }
 
 
