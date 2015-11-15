@@ -3,11 +3,12 @@ package com.sheffield.gamjam;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Enemy {
 	
@@ -17,6 +18,8 @@ public class Enemy {
 	final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	final int LEFT_BOUND;
 	float lastShoot = 0;
+	float elapsedTime = 0;
+	Animation animation;
 	GameScreen game;
 	
 	public Enemy(GameScreen g) {
@@ -26,10 +29,20 @@ public class Enemy {
 	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-30);
 	    direction = new Vector2(-2,0);
 	    LEFT_BOUND = 0;
+
+		// Creating the animation
+		Array<Sprite> keys = new Array<Sprite>();
+		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/001.png"))));
+		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/002.png"))));
+		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/003.png"))));
+		animation = new Animation(0.1f, keys, Animation.PlayMode.LOOP_REVERSED);
+
+
 	}
 	
 	public void render(SpriteBatch batch) {
-	    batch.draw(image, pos.x, pos.y, 50, 100);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		batch.draw(animation.getKeyFrame(elapsedTime, true), this.pos.x, game.ground.g.getHeight()-30, 50, 100);
 	    update();
 	}
 	
