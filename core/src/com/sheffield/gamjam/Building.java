@@ -44,7 +44,7 @@ public class Building {
 	public static Building randomBuilding() {
 		Random rand = new Random();
 		int num = rand.nextInt(TEXTURES.length-1);
-		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 50, WIDTHS[num], HEIGHTS[num]);
+		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 63, WIDTHS[num], HEIGHTS[num]);
 	}
 	
 	public static void addNewBuilding(List<Building> buildings) {
@@ -109,7 +109,7 @@ public class Building {
 	
 	public void destroy() {
 		destroyed = true;
-		setDimensions(width, height/10);
+		setDimensions(width, (height + width/3)/5);
 	}
 	
 	public void update(float x, float y) {
