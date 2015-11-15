@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,8 +47,12 @@ public class GameScreen implements Screen {
 	List<Building> buildings;
     float time = 0; // For sound playing
     boolean sPlaying = false;
-	
-	
+
+	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
+	private BitmapFont fontGreen;
+	private BitmapFont fontRed;
+
+
 	public GameScreen(GameJam g)
 	{
 		game = g;
@@ -57,8 +60,8 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void show() {
-
 		batch = new SpriteBatch();
+
 
 		// Creating ground object
 		ground = new Ground(Gdx.files.local("ground.png"));
@@ -81,6 +84,11 @@ public class GameScreen implements Screen {
 		parameter.shadowOffsetY = 1;
 		parameter.shadowOffsetX = 1;
 		font12 = gen.generateFont(parameter);
+		parameter.size = 30;
+		parameter.color = Color.GREEN;
+		fontGreen = gen.generateFont(parameter);
+		parameter.color = Color.RED;
+		fontRed = gen.generateFont(parameter);
 		gen.dispose();
 		
 		
@@ -173,6 +181,13 @@ public class GameScreen implements Screen {
         font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
 
         player.render(batch);
+
+        for(MoneyFly mf : moneyFlies)
+		{
+			mf.update();
+			mf.draw(batch);
+		}
+
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext(); ) {
@@ -197,6 +212,11 @@ public class GameScreen implements Screen {
             sPlaying = true;
         }
         else sPlaying = false;
+
+        for (Iterator<MoneyFly> it = moneyFlies.iterator(); it.hasNext();) {
+            if(it.next().finished)
+                it.remove();
+        }
     }
 
 

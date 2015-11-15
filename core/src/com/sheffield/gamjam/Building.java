@@ -90,7 +90,7 @@ public class Building {
 	
 	public void destroy() {
 		destroyed = true;
-		setDimensions(width, height/10);
+		setDimensions(width, (height + width/3)/5);
 	}
 	
 	public void update(float x, float y) {

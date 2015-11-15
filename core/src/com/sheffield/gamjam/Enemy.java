@@ -18,7 +18,9 @@ public class Enemy {
 	float elapsedTime = 0;
 	Animation animation;
 	GameScreen game;
-	
+	private boolean shooting = false;
+	private int lastShot;
+
 	public Enemy(GameScreen g) {
         image = new Texture("gent64trans.png");
         bullet = new Texture("bacon-trans.png");
@@ -32,24 +34,37 @@ public class Enemy {
 		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/001.png"))));
 		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/002.png"))));
 		keys.add(new Sprite(new Texture(Gdx.files.local("animation-enemy/003.png"))));
-		animation = new Animation(0.1f, keys, Animation.PlayMode.LOOP_REVERSED);
+		animation = new Animation(0.3f, keys, Animation.PlayMode.LOOP_REVERSED);
 
 
 	}
 	
 	public void render(SpriteBatch batch) {
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		batch.draw(animation.getKeyFrame(elapsedTime, true), this.pos.x, game.ground.g.getHeight()-30, 50, 100);
+
+		if(shooting)
+			batch.draw(animation.getKeyFrame(elapsedTime, true), this.pos.x, pos.y, 50, 100);
+		else
+			batch.draw(image, pos.x, pos.y, 50, 100);
 	    update();
 	}
 	
 	public void update() {
+		lastShot++;
+
+		if(lastShot > 30)
+			shooting = false;
+
 		pos.add(direction);
 		if(pos.x<=SCREEN_WIDTH-image.getWidth()) {
 			if(Gdx.input.justTouched() && Math.random()>0.5) {
+
+				shooting = true;
+				lastShot = 0;
+
 				Vector2 origin = game.player.pos.cpy();
 				Vector2 v = origin.sub(pos.cpy()).nor();
-				double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
+				//double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
 				Vector2 dir = v.cpy();
 				dir.nor();				
 				Vector2 gunPos = pos.cpy();				
