@@ -115,7 +115,7 @@ public class GameScreen implements Screen {
         for(Bullet b : bullets)
         	b.draw(batch);
         
-        font12.draw(batch, "Money: Â£"+numFormat(money,","), 10, 705);
+        font12.draw(batch, "Money: £"+numFormat(money,","), 10, 705);
         
 		player.render(batch);
         batch.end();
