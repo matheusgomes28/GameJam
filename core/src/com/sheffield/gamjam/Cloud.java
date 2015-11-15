@@ -9,11 +9,10 @@ public class Cloud {
 	
 	private int x, y; // position
 	private TextureRegion region;
-	private final int MOVE_SPEED;
+	public static int speed;
 	
 	
 	public Cloud(TextureRegion region, int moveSpeed, int xOffSet){
-		this.MOVE_SPEED = moveSpeed;
 		this.region = new TextureRegion(region);
 		this.region.setRegion(930, 1805, 203, 133);
 
@@ -32,7 +31,7 @@ public class Cloud {
 	}
 	
 	public void update(SpriteBatch b){
-		x = x - MOVE_SPEED;
+		x = x - speed;
 		draw(b);
 		
 		if (x < -region.getRegionWidth()) {

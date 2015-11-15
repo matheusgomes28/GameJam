@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
 	public Cloud[] clouds;
 	public Tree[] trees;
 	public Ground ground;
+	public float speed = 1f;
 
     ArrayList<Sound> sounds;
     Sound soundtrack;
@@ -44,7 +45,7 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 10000;
+	long money = 100L;
 	int rage = -1;
 	GameJam game;
 	
@@ -55,7 +56,8 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
-	public int highScore = 0;
+	public long highScore = 0;
+	public int level = 1;
 
 	
 	public GameScreen(GameJam g)
@@ -150,13 +152,18 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.10f) - 20;
+        		int tax = -(int)(money*0.05f) - (int)(0.8*Math.pow(10, level));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
         	}
         }
-
+        
+        Building.speed = 7+level;
+        MoneyFly.speed = 7+level;
+        Tree.speed = (7+level)/2;
+        Cloud.speed = (7+level)/2;
+        
         loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
@@ -166,7 +173,7 @@ public class GameScreen implements Screen {
                 if (bldng.checkBoundaries(b.pos.x, b.pos.y)) {
                 	bldng.destroy();
             		it.remove();
-            		int win = (int)(Math.random()*1000);
+            		int win = (int)(Math.random()*Math.pow(10, level+1));
 
             		if(!bldng.positive)
             			win = -win;
@@ -200,7 +207,7 @@ public class GameScreen implements Screen {
         for (Cloud cloud : clouds) cloud.update(batch);
         for (Tree tree : trees) tree.update(batch);
 
-        Building.updateAll(buildings, batch, timeElapsed);
+        Building.updateAll(buildings, batch, timeElapsed, this);
 
         for (Bullet b : bullets)
             b.draw(batch);
@@ -216,7 +223,8 @@ public class GameScreen implements Screen {
             e.render(batch);
 
         font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
-
+        font12.draw(batch, "Level "+ level , 1000, 705);
+ 
         player.render(batch);
         
         for(MoneyFly mf : moneyFlies)
@@ -265,8 +273,29 @@ public class GameScreen implements Screen {
             game.setScreen(game.loseScreen);
 
         //win condition
-        if(money > 50000)
+        if(false)
             game.setScreen(game.winScreen);
+        
+        if(money > 1000)
+        	level = 2;
+        if(money > 10000)
+        	level = 3;
+        if(money > 100000)
+        	level = 4;
+        if(money > 1000000)
+        	level = 5;
+        if(money > 10000000)
+        	level = 6;
+        if(money > 100000000)
+        	level = 7;
+        if(money > 1000000000)
+        	level = 8;
+        if(money > 10000000000L)
+        	level = 9;
+        if(money > 100000000000L)
+        	level = 10;
+        
+        
     }
 
 

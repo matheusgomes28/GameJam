@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Building {
-	static float speed = 7;
+	public static float speed = 7;
 	TextureRegion region;
 	boolean destroyed;
 	Texture building;
@@ -34,40 +34,42 @@ public class Building {
     static final int[] N_HEIGHTS = {292,160};
 
     boolean positive;
-    static float interval = 3;
+    
+    static float interval = 0.5f;
     static float lastTime = 0;
 	
 
 	
-	public static Building randomBuilding() {
-		Random rand = new Random();
-
-		if(Math.random() > 0.5)
+	public static Building randomBuilding(GameScreen gameScreen) {
+		
+		float prob = 0.1f*gameScreen.level;
+		
+		if(Math.random() > prob)
 		{
-			int num = rand.nextInt(POSITIVE.length-1);
+			int num = (int)Math.round(Math.random()*(POSITIVE.length-1));
 			return new Building(POSITIVE[num], Gdx.graphics.getWidth() + 50, 63, P_WIDTHS[num], P_HEIGHTS[num], true);
 		}
 		else
 		{
-			int num = rand.nextInt(NEGATIVE.length-1);
+			int num = (int)Math.round(Math.random()*(NEGATIVE.length-1));
 			return new Building(NEGATIVE[num], Gdx.graphics.getWidth() + 50, 63, N_WIDTHS[num], N_HEIGHTS[num], false);
 		}
 	}
 	
-	public static void addNewBuilding(List<Building> buildings, float timeElapsed) {
+	public static void addNewBuilding(List<Building> buildings, float timeElapsed, GameScreen gameScreen) {
         if (buildings.isEmpty()) {
-            buildings.add(randomBuilding());
+            buildings.add(randomBuilding(gameScreen));
             lastTime = timeElapsed;
 
         } else {
 
             if ((timeElapsed - lastTime) > interval) {
-                buildings.add(randomBuilding());
+                buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
-                if(interval > 0.6)  interval = interval - 0.1f;
+                //if(interval > 0.2)  interval = interval - 0.1f;
             }
         }
-    }
+	}
 	
 	public static void removeBuildings(List<Building> buildings) {
 		Building firstBuilding = buildings.get(0);
@@ -77,8 +79,8 @@ public class Building {
 		}
 	}
 
-	public static void updateAll(List<Building> buildings, SpriteBatch batch, float timeElapsed) {
-		addNewBuilding(buildings, timeElapsed);
+	public static void updateAll(List<Building> buildings, SpriteBatch batch, float timeElapsed, GameScreen gameScreen) {
+		addNewBuilding(buildings, timeElapsed, gameScreen);
 		removeBuildings(buildings);
 		if (buildings != null && !buildings.isEmpty()) {
 			for (Building b: buildings) {
@@ -86,6 +88,9 @@ public class Building {
 				b.draw(batch);
 			}
 		}
+		
+		speed = gameScreen.level;
+		//interval = 1 + 1/gameScreen.level;
 	}
 	
 	Building(Texture buildingTexture, float x, float y, float width, float height, boolean pstv) {
