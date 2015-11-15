@@ -17,9 +17,9 @@ public class Enemy {
 	final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	final int LEFT_BOUND;
 	float lastShoot = 0;
-	GameJam game;
+	GameScreen game;
 	
-	public Enemy(GameJam g) {
+	public Enemy(GameScreen g) {
         image = new Texture("gent64trans.png");
         bullet = new Texture("bacon-trans.png");
 	    game = g;

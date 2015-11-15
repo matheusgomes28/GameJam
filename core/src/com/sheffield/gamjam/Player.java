@@ -13,9 +13,9 @@ public class Player {
     final int BASE_SPEED = 7;
 	final int HIGH_SPEED = 14;
 	Gun gun;
-	GameJam game;
+	GameScreen game;
 
-    Player(GameJam g) {
+    Player(GameScreen g) {
         pos = new Vector2(200, 100);
         image = new Texture("alien-david.png");
         final int SCREEN_WIDTH = Gdx.graphics.getWidth();

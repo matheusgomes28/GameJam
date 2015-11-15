@@ -45,6 +45,9 @@ public class Gun {
 			
 			Vector2 gunPos = pos.cpy();
 			
+			gunPos.x += 50;
+			gunPos.y += 20;
+			
 			gunPos.mulAdd(v, 80);
 			
 			
