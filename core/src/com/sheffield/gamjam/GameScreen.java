@@ -7,7 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.backends.lwjgl.audio.Mp3;
+//import com.badlogic.gdx.backends.lwjgl.audio.Mp3;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 10000;
+	int money = 100;
 	int rage = -1;
 	GameJam game;
 	
@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
 	public int highScore = 0;
+	public int level = 1;
 
 	
 	public GameScreen(GameJam g)
@@ -149,7 +150,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.10f) - 20;
+        		int tax = -(int)(money*0.05f) - (int)(0.2*Math.pow(10, level));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -165,7 +166,7 @@ public class GameScreen implements Screen {
                 if (bldng.checkBoundaries(b.pos.x, b.pos.y)) {
                 	bldng.destroy();
             		it.remove();
-            		int win = (int)(Math.random()*1000);
+            		int win = (int)(Math.random()*Math.pow(10, level+1));
 
             		if(!bldng.positive)
             			win = -win;
@@ -197,7 +198,7 @@ public class GameScreen implements Screen {
         for (Cloud cloud : clouds) cloud.update(batch);
         for (Tree tree : trees) tree.update(batch);
 
-        Building.updateAll(buildings, batch, timeElapsed);
+        Building.updateAll(buildings, batch, timeElapsed, this);
 
         for (Bullet b : bullets)
             b.draw(batch);
@@ -213,7 +214,8 @@ public class GameScreen implements Screen {
             e.render(batch);
 
         font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
-
+        font12.draw(batch, "Level "+ level , 1000, 705);
+ 
         player.render(batch);
         
         for(MoneyFly mf : moneyFlies)
@@ -262,8 +264,24 @@ public class GameScreen implements Screen {
             game.setScreen(game.loseScreen);
 
         //win condition
-        if(money > 50000)
+        if(money > 1000000000)
             game.setScreen(game.winScreen);
+        
+        if(money > 1000)
+        	level = 2;
+        if(money > 10000)
+        	level = 3;
+        if(money > 100000)
+        	level = 4;
+        if(money > 1000000)
+        	level = 5;
+        if(money > 10000000)
+        	level = 6;
+        if(money > 100000000)
+        	level = 7;
+        if(money > 1000000000)
+        	level = 8;
+        
     }
 
 

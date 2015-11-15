@@ -34,15 +34,17 @@ public class Building {
     static final int[] N_HEIGHTS = {292,160};
 
     boolean positive;
-    static float interval = 5;
+    static float interval = 2;
     static float lastTime = 0;
 	
 
 	
-	public static Building randomBuilding() {
+	public static Building randomBuilding(GameScreen gameScreen) {
 		Random rand = new Random();
-
-		if(Math.random() > 0.5)
+		
+		float prob = 0.1f*gameScreen.level;
+		
+		if(Math.random() > prob)
 		{
 			int num = rand.nextInt(POSITIVE.length-1);
 			return new Building(POSITIVE[num], Gdx.graphics.getWidth() + 50, 63, P_WIDTHS[num], P_HEIGHTS[num], true);
@@ -54,15 +56,15 @@ public class Building {
 		}
 	}
 	
-	public static void addNewBuilding(List<Building> buildings, float timeElapsed) {
+	public static void addNewBuilding(List<Building> buildings, float timeElapsed, GameScreen gameScreen) {
         if (buildings.isEmpty()) {
-            buildings.add(randomBuilding());
+            buildings.add(randomBuilding(gameScreen));
             lastTime = timeElapsed;
 
         } else {
 
             if ((timeElapsed - lastTime) > interval) {
-                buildings.add(randomBuilding());
+                buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
                 if(interval > 0.6)  interval = interval - 0.1f;
             }
@@ -77,8 +79,8 @@ public class Building {
 		}
 	}
 
-	public static void updateAll(List<Building> buildings, SpriteBatch batch, float timeElapsed) {
-		addNewBuilding(buildings, timeElapsed);
+	public static void updateAll(List<Building> buildings, SpriteBatch batch, float timeElapsed, GameScreen gameScreen) {
+		addNewBuilding(buildings, timeElapsed, gameScreen);
 		removeBuildings(buildings);
 		if (buildings != null && !buildings.isEmpty()) {
 			for (Building b: buildings) {
@@ -86,6 +88,8 @@ public class Building {
 				b.draw(batch);
 			}
 		}
+		
+		interval = 1 + 1/gameScreen.level;
 	}
 	
 	Building(Texture buildingTexture, float x, float y, float width, float height, boolean pstv) {
