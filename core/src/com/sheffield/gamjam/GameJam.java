@@ -23,31 +23,36 @@ public class GameJam extends Game {
 	ArrayList<Explosion> explosions;
 	public Cloud[] clouds;
 	public Ground ground;
-    public ArrayList<Bullet> bullets;
-	ArrayList<Explosion> explosions;
-	public Cloud[] clouds;
-	public Ground ground;
 	public Tree[] trees;
     public Texture bg;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		// Creating ground object
-		ground = new Ground(Gdx.files.local("ground.png"));
+
+        // Creating ground object
+        ground = new Ground(Gdx.files.local("ground.png"));
+        bg = new Texture(Gdx.files.local("bg.png"));
+
         player = new Player(this);
         enemies = new ArrayList<Enemy>();
 
         enemyBullets = new ArrayList<EnemyBullet>();
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
-		ground = new Ground(Gdx.files.local("ground.png"));
 
 		// Creating clouds with texture region
 		TextureRegion t = new TextureRegion(new Texture(Gdx.files.local("sprite_sheet1.png")), 930, 1805, 203, 133);
 		clouds = new Cloud[]{new Cloud(t, 3, 50),
 							  new Cloud(t, 3, 500),
 							  new Cloud(t, 3, 1000)};
+
+        // Creating the trees array
+        trees = new Tree[]{new Tree(t,ground, 6, 50, 1),
+                new Tree(t,ground, 6, 1000, 0),
+                new Tree(t,ground, 6, 2000, 1)};
+
+        // Creating enemies init
 		for(int i = 0; i<1; i++)
 			enemies.add(new Enemy(this));
 		explosions = new ArrayList<Explosion>();
@@ -55,30 +60,8 @@ public class GameJam extends Game {
 		shapeRenderer = new ShapeRenderer();
 
 
-		// Creating ground object
-		ground = new Ground(Gdx.files.local("ground.png"));
-        player = new Player(this);
-        bullets = new ArrayList<Bullet>();
-		explosions = new ArrayList<Explosion>();
 
-		ground = new Ground(Gdx.files.local("ground.png"));
 
-        bg = new Texture(Gdx.files.local("bg.png"));
-
-		// Creating clouds with texture region
-		TextureRegion t = new TextureRegion(new Texture(Gdx.files.local("sprite_sheet1.png")));
-		clouds = new Cloud[]{new Cloud(t, 4, 0),
-							  new Cloud(t, 4, 500),
-							  new Cloud(t, 4, 1000)};
-
-		// Creating the trees array
-		trees = new Tree[]{new Tree(t,ground, 6, 50, 1),
-						   new Tree(t,ground, 6, 1000, 0),
-                           new Tree(t,ground, 6, 2000, 1)};
-
-		explosions = new ArrayList<Explosion>();
-
-		shapeRenderer = new ShapeRenderer();
 	}
 
 	@Override
@@ -99,10 +82,13 @@ public class GameJam extends Game {
 
         batch.begin();
 
-		ground.draw(batch);
+        batch.draw(bg, 0,0);
+        ground.draw(batch);
 
-		// Updating clouds fam
-		for(Cloud cloud:clouds) cloud.update(batch);
+        // Updating clouds fam
+        for(Cloud cloud:clouds) cloud.update(batch);
+        for(Tree tree:trees) tree.update(batch);
+
 
 		// Render player's bullets
         for(Bullet b : bullets)
@@ -119,6 +105,8 @@ public class GameJam extends Game {
         // Render enemies
         for(Enemy e : enemies)
         	e.render(batch);
+
+
         // Render player
 		player.render(batch);
 
@@ -131,16 +119,6 @@ public class GameJam extends Game {
                 explosions.add(new Explosion(pos.x, pos.y));
             }
         }
-
-        batch.begin();
-
-        batch.draw(bg, 0,0);
-
-		ground.draw(batch);
-
-		// Updating clouds fam
-		for(Cloud cloud:clouds) cloud.update(batch);
-        for(Tree tree:trees) tree.update(batch);
 
         for(Bullet b : bullets)
         	b.draw(batch);

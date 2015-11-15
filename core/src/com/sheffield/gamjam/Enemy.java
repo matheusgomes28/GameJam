@@ -23,7 +23,7 @@ public class Enemy {
         image = new Texture("gent64trans.png");
         bullet = new Texture("bacon-trans.png");
 	    game = g;
-	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, 53);
+	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-5);
 	    direction = new Vector2(-2,0);
 	    LEFT_BOUND = 0;
 	}
@@ -36,7 +36,7 @@ public class Enemy {
 	public void update() {
 		pos.add(direction);
 		if(pos.x<=SCREEN_WIDTH-image.getWidth()) {
-			if(Gdx.input.justTouched() && Math.random()>0.35) {
+			if(Gdx.input.justTouched() && Math.random()>0.5) {
 				Vector2 origin = game.player.pos.cpy();
 				Vector2 v = origin.sub(pos.cpy()).nor();
 				double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
@@ -49,7 +49,7 @@ public class Enemy {
 		}
 		if (pos.x < -bullet.getWidth()) {
 			pos.x = (float)(Gdx.graphics.getWidth() + bullet.getWidth()/1.5);
-			pos.y = 53;
+			pos.y = game.ground.g.getHeight()-5;
 		}
 	}
 	
