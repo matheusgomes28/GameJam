@@ -10,10 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Building {
-	static float speed = 2.0f;
+	static float speed = 7;
 	TextureRegion region;
 	boolean destroyed;
 	Texture building;
+	GameScreen game;
 	float x,y, width, height;
 	static final Texture HOSPITAL = new Texture(Gdx.files.internal("hospital.png"));
 	static final Texture SCHOOL = new Texture(Gdx.files.internal("school.png"));
@@ -22,53 +23,62 @@ public class Building {
 	static final Texture BANK	 = new Texture(Gdx.files.internal("bank.png"));
 	static final Texture RUBBLE = new Texture(Gdx.files.internal("rubble.png"));
 	static final Texture[] TEXTURES = {HOSPITAL, SCHOOL, HOUSE, SKYSCRAPER, BANK, RUBBLE};
-	static final int[] WIDTHS = {200, 100, 110, 68, 200};
-	static final int[] HEIGHTS = {150, 150, 100, 292, 160};
+
+    static final Texture[] POSITIVE = {HOSPITAL, SCHOOL, HOUSE};
+    static final Texture[] NEGATIVE = {SKYSCRAPER, BANK};
+
+    static final int[] P_WIDTHS = {200,100,110};
+    static final int[] N_WIDTHS = {68, 200};
+
+    static final int[] P_HEIGHTS = {150,150,100};
+    static final int[] N_HEIGHTS = {292,160};
+
+    boolean positive;
+    static float interval = 3;
+    static float lastTime = 0;
 	
-	public static List<Building> setupBuildings(int numBuildings) {
-		List<Building> buildings = new ArrayList<Building>();
-//		Building hospital = new Building(HOSPITAL, 100, 10, 50, 50);
-//		Building school = new Building(SCHOOL, 200, 10, 25, 50);
-//		Building house = new Building(HOUSE, 350, 10, 25, 25);
-//		buildings.add(hospital);
-//		buildings.add(school);
-//		buildings.add(house);
-//		for(int i=1; i<numBuildings; i++) {
-//			Random rand = new Random();
-//			int num = rand.nextInt(TEXTURES.length-1);
-//			buildings.add(new Building(TEXTURES[num], 100, 10, WIDTHS[num], HEIGHTS[num]));
-//		}
-		return buildings;
-	}
+
 	
 	public static Building randomBuilding() {
 		Random rand = new Random();
-		int num = rand.nextInt(TEXTURES.length-1);
-		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 63, WIDTHS[num], HEIGHTS[num]);
+
+		if(Math.random() > 0.5)
+		{
+			int num = rand.nextInt(POSITIVE.length-1);
+			return new Building(POSITIVE[num], Gdx.graphics.getWidth() + 50, 63, P_WIDTHS[num], P_HEIGHTS[num], true);
+		}
+		else
+		{
+			int num = rand.nextInt(NEGATIVE.length-1);
+			return new Building(NEGATIVE[num], Gdx.graphics.getWidth() + 50, 63, N_WIDTHS[num], N_HEIGHTS[num], false);
+		}
 	}
 	
-	public static void addNewBuilding(List<Building> buildings) {
-		if (buildings.isEmpty()) {
-			buildings.add(randomBuilding());
-		}
-		else {
-			Building lastBuilding = buildings.get(buildings.size() - 1);
-			boolean awayFromSide = lastBuilding.x + lastBuilding.width < Gdx.graphics.getWidth();
-			if (awayFromSide) {
-				buildings.add(randomBuilding());
-			}
-		}
-	}
+	public static void addNewBuilding(List<Building> buildings, float timeElapsed) {
+        if (buildings.isEmpty()) {
+            buildings.add(randomBuilding());
+            lastTime = timeElapsed;
+
+        } else {
+
+            if ((timeElapsed - lastTime) > interval) {
+                buildings.add(randomBuilding());
+                lastTime  = timeElapsed;
+                if(interval > 0.6)  interval = interval - 0.1f;
+            }
+        }
+    }
 	
 	public static void removeBuildings(List<Building> buildings) {
 		Building firstBuilding = buildings.get(0);
-		if (firstBuilding.x + firstBuilding.width < 0) {
+		if (firstBuilding.x + firstBuilding.width < 0
+            && buildings.size() > 1) {
 			buildings.remove(0);
 		}
 	}
-	
-	public static void updateAll(List<Building> buildings, SpriteBatch batch) {
-		addNewBuilding(buildings);
+
+	public static void updateAll(List<Building> buildings, SpriteBatch batch, float timeElapsed) {
+		addNewBuilding(buildings, timeElapsed);
 		removeBuildings(buildings);
 		if (buildings != null && !buildings.isEmpty()) {
 			for (Building b: buildings) {
@@ -78,17 +88,8 @@ public class Building {
 		}
 	}
 	
-//	Building(Texture buildingTexture) {
-//		destroyed = false; // change to false for actual
-//		rubble = RUBBLE;
-//		building = buildingTexture;
-//		x = 10;
-//		y = 10;
-//		width = 200;
-//		height = 200;
-//	}
-	
-	Building(Texture buildingTexture, float x, float y, float width, float height) {
+	Building(Texture buildingTexture, float x, float y, float width, float height, boolean pstv) {
+		positive = pstv;
 		destroyed = false;
 		building = buildingTexture;
 		this.x = x;

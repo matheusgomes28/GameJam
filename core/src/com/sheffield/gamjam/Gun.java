@@ -10,6 +10,8 @@ public class Gun {
 	Sprite gunSprite;
 	Texture bulletTexture;
 	Player player;
+	int frameUntilCanFire;
+	private static final int FRAMES_BETWEEN_BULLETS = 15;
 	
 	public Gun(Player p)
 	{
@@ -18,6 +20,7 @@ public class Gun {
 		gunSprite = new Sprite(new Texture("rocketLauncher.png"));
 		gunSprite.setRotation(-90);
 		bulletTexture = new Texture("bullet.png");
+		frameUntilCanFire = 0;
 	}
 	
 	public void update()
@@ -36,23 +39,19 @@ public class Gun {
 		double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
 		
 		gunSprite.setRotation((int)degrees);
-		
-		if(Gdx.input.justTouched())
+
+		frameUntilCanFire = Math.max(0, frameUntilCanFire - 1);
+
+		if(Gdx.input.justTouched() && frameUntilCanFire==0)
 		{
-			Vector2 dir = v.cpy();
-			
-			dir.nor();
-			
-			Vector2 gunPos = pos.cpy();
-			
-			gunPos.x += 50;
-			gunPos.y += 20;
-			
-			gunPos.mulAdd(v, 80);
-			
-			
+			Vector2 gunPos = pos
+					.cpy()
+					.add(50, 20)
+					.mulAdd(v, 80);
+
 			player.game.bullets.add(new Bullet(bulletTexture, gunPos, v.cpy()));
-			
+
+			frameUntilCanFire = FRAMES_BETWEEN_BULLETS;
 		}
 	}
 }

@@ -15,6 +15,7 @@ public class Cloud {
 	public Cloud(TextureRegion region, int moveSpeed, int xOffSet){
 		this.MOVE_SPEED = moveSpeed;
 		this.region = new TextureRegion(region);
+		this.region.setRegion(930, 1805, 203, 133);
 
 		this.x = xOffSet + Gdx.graphics.getWidth() + region.getRegionWidth()/2;
 		this.y = getY();
@@ -24,6 +25,7 @@ public class Cloud {
 	private int getY(){
 		return (int) (Gdx.graphics.getHeight()/2 + Math.random()*(Gdx.graphics.getHeight()/2 - region.getRegionHeight()));
 	}
+	
 	
 	public void draw(SpriteBatch b){
 		b.draw(region, x, y);

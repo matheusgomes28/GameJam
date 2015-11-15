@@ -12,6 +12,7 @@ public class Player {
     final int LEFT_BOUND, RIGHT_BOUND, UPPER_BOUND, LOWER_BOUND;
     final int BASE_SPEED = 7;
 	final int HIGH_SPEED = 14;
+	
 	Gun gun;
 	GameScreen game;
 

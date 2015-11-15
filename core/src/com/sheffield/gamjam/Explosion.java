@@ -1,7 +1,5 @@
 package com.sheffield.gamjam;
-/**
- * Created by Angus on 14/11/2015.
- */
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
