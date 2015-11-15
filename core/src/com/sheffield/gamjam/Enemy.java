@@ -26,7 +26,7 @@ public class Enemy {
         image = new Texture("gent64trans.png");
         bullet = new Texture("bacon-trans.png");
 	    game = g;
-	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-30);
+	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-18);
 	    direction = new Vector2(-2,0);
 	    LEFT_BOUND = 0;
 
@@ -75,7 +75,7 @@ public class Enemy {
 		}
 		if (pos.x < -bullet.getWidth()) {
 			pos.x = (float)(Gdx.graphics.getWidth() + bullet.getWidth()/1.5);
-			pos.y = game.ground.g.getHeight()-5;
+			pos.y = game.ground.g.getHeight()-18;
 		}
 	}
 	

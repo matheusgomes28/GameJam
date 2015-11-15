@@ -35,7 +35,8 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 1000;
+	int money = 10000;
+	int rage = -1;
 	GameJam game;
 	
 	List<Building> buildings;
@@ -108,7 +109,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-        Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
+        Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         player.update();
@@ -121,8 +122,8 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = (int)(money*0.10f);
-        		money -= tax;
+        		int tax = -(int)(money*0.10f);
+        		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
         		
         	}
@@ -193,7 +194,14 @@ public class GameScreen implements Screen {
 			mf.update();
 			mf.draw(batch);
 		}
-        
+        if(money<5000) {
+        	rage = 10;
+        	batch.setColor(0.9f,0,0,1);
+        }
+        System.out.println("rage: "+rage);
+        if(rage==0) 
+        	batch.setColor(1,1,1,1);
+        	
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext(); ) {
@@ -213,6 +221,8 @@ public class GameScreen implements Screen {
         
         if(money < highScore )
         	highScore = money;
+        if(rage>0)
+        	rage--;
     }
 
 
