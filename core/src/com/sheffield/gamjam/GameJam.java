@@ -27,6 +27,8 @@ public class GameJam extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+
+
 		// Creating ground object
 		ground = new Ground(Gdx.files.local("ground.png"));
         player = new Player(this);
