@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -116,14 +115,6 @@ public class Building {
 	public void update(float x, float y) {
 		this.x = x;
 		this.y = y;
-		//here for debug
-		int mouseX = Gdx.input.getX();
-		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		boolean mouseOver = this.checkBoundaries(mouseX, mouseY);
-		boolean mouseDown = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
-		if (mouseOver && mouseDown) {
-			destroy();
-		}
 	}
 
 	public void draw(SpriteBatch batch) {

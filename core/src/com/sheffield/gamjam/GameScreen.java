@@ -80,14 +80,25 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         player.update();
-
+        
+        loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext();) {
             Bullet b = it.next();
             b.update();
+            
+            for(Building bldng : buildings)
+            	if(bldng.checkBoundaries(b.pos.x, b.pos.y))
+            	{
+            		bldng.destroy();
+            		it.remove();
+            		money += Math.random()*1000;
+            		explosions.add(new Explosion(b.pos.x, b.pos.y));
+            		continue loop;
+            	}
+            
             if (b.pos.y <= ground.g.getHeight()) {
                 Vector2 pos = b.pos;
                 it.remove();
-                money += Math.random()*1000;
                 explosions.add(new Explosion(pos.x, pos.y));
             }
         }

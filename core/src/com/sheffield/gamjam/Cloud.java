@@ -1,6 +1,5 @@
 package com.sheffield.gamjam;
 
-import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,9 +15,6 @@ public class Cloud {
 	public Cloud(TextureRegion region, int moveSpeed, int xOffSet){
 		this.MOVE_SPEED = moveSpeed;
 		this.region = new TextureRegion(region);
-		
-		
-		Random rand = new Random();
 
 		this.x = xOffSet + Gdx.graphics.getWidth() + region.getRegionWidth()/2;
 		this.y = getY();
