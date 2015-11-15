@@ -33,6 +33,10 @@ public class GameScreen implements Screen {
 	
 	List<Building> buildings;
 	
+	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
+	private BitmapFont fontGreen;
+	private BitmapFont fontRed;
+	
 	
 	public GameScreen(GameJam g)
 	{
@@ -58,6 +62,11 @@ public class GameScreen implements Screen {
 		parameter.shadowOffsetY = 1;
 		parameter.shadowOffsetX = 1;
 		font12 = gen.generateFont(parameter);
+		parameter.size = 30;
+		parameter.color = Color.GREEN;
+		fontGreen = gen.generateFont(parameter);
+		parameter.color = Color.RED;
+		fontRed = gen.generateFont(parameter);
 		gen.dispose();
 		
 		
@@ -91,7 +100,9 @@ public class GameScreen implements Screen {
             	{
             		bldng.destroy();
             		it.remove();
-            		money += Math.random()*1000;
+            		int win = (int)(Math.random()*1000);
+            		money += win;
+            		moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen));
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
             		continue loop;
             	}
@@ -118,8 +129,20 @@ public class GameScreen implements Screen {
         font12.draw(batch, "Money: £"+numFormat(money,","), 10, 705);
         
 		player.render(batch);
+		
+		for(MoneyFly mf : moneyFlies)
+		{
+			mf.update();
+			mf.draw(batch);
+		}
+		
         batch.end();
-
+        
+        for (Iterator<MoneyFly> it = moneyFlies.iterator(); it.hasNext();) {
+            if(it.next().finished)
+            	it.remove();
+		}
+        
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {
             Explosion e = it.next();
 			boolean doDelete = e.update(1.0f / 60.0f);
