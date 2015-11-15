@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -142,7 +143,10 @@ public class GameScreen implements Screen {
                 if (building.checkBoundaries(b.pos.x, b.pos.y)) {
                     building.destroy();
                     it.remove();
-                    money += Math.random() * 1000;
+                    int win = (int)(Math.random()*1000);
+                    money += win;
+
+                    moneyFlies.add(new MoneyFly(new Vector2(building.x, building.y), win, fontGreen));
                     explosions.add(new Explosion(b.pos.x, b.pos.y));
                     continue loop;
                 }
