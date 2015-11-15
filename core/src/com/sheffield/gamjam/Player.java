@@ -3,8 +3,6 @@ package com.sheffield.gamjam;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
@@ -15,10 +13,11 @@ public class Player {
     final int BASE_SPEED = 7;
 	final int HIGH_SPEED = 14;
 	Gun gun;
+	GameJam game;
 
-    Player() {
+    Player(GameJam g) {
         pos = new Vector2(200, 100);
-        image = new Texture("shipGreen.png");
+        image = new Texture("alien-david.png");
         final int SCREEN_WIDTH = Gdx.graphics.getWidth();
         final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
         
@@ -26,7 +25,9 @@ public class Player {
         RIGHT_BOUND = SCREEN_WIDTH;
         UPPER_BOUND = SCREEN_HEIGHT;
         LOWER_BOUND = SCREEN_HEIGHT/2;
-        
+
+        game = g;
+
         gun = new Gun(this);
     }
 
@@ -37,27 +38,30 @@ public class Player {
 
     public void update() {
     	int speed = BASE_SPEED;
-    	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT ))
-    	{
-    		speed = HIGH_SPEED;
-    	}
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+    	if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT )) {
+            speed = HIGH_SPEED;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+        		Gdx.input.isKeyPressed(Input.Keys.A)) {
             pos.x -= speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+        		Gdx.input.isKeyPressed(Input.Keys.D)) {
             pos.x += speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) ||
+        		Gdx.input.isKeyPressed(Input.Keys.W)) {
             pos.y += speed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+        		Gdx.input.isKeyPressed(Input.Keys.S)) {
             pos.y -= speed;
         }
 
         collideBounds();
         
         gun.update();
-        
+
     }
 
     public void collideBounds() {
