@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Building {
 	static float speed = 7;
+	TextureRegion region;
 	boolean destroyed;
 	Texture building;
+	GameScreen game;
 	float x,y, width, height;
 	static final Texture HOSPITAL = new Texture(Gdx.files.internal("hospital.png"));
 	static final Texture SCHOOL = new Texture(Gdx.files.internal("school.png"));
@@ -30,8 +32,17 @@ public class Building {
 	
 	public static Building randomBuilding() {
 		Random rand = new Random();
-		int num = rand.nextInt(TEXTURES.length-1);
-		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 63, WIDTHS[num], HEIGHTS[num]);
+
+		if(Math.random() > 0.5)
+		{
+			int num = rand.nextInt(POSITIVE.length-1);
+			return new Building(POSITIVE[num], Gdx.graphics.getWidth() + 50, 63, P_WIDTHS[num], P_HEIGHTS[num], true);
+		}
+		else
+		{
+			int num = rand.nextInt(NEGATIVE.length-1);
+			return new Building(NEGATIVE[num], Gdx.graphics.getWidth() + 50, 63, N_WIDTHS[num], N_HEIGHTS[num], false);
+		}
 	}
 	
 	public static void addNewBuilding(List<Building> buildings, float timeElapsed) {
@@ -69,7 +80,8 @@ public class Building {
 		}
 	}
 	
-	Building(Texture buildingTexture, float x, float y, float width, float height) {
+	Building(Texture buildingTexture, float x, float y, float width, float height, boolean pstv) {
+		positive = pstv;
 		destroyed = false;
 		building = buildingTexture;
 		this.x = x;

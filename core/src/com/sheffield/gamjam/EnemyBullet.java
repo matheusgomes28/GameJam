@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EnemyBullet {
 	
-	Vector2 pos;
+	public Vector2 pos;
 	Vector2 dir;
 	Sprite bulletSprite;;
 	//final float SPEED = 4f;

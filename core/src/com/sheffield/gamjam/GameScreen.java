@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,7 +41,8 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 0;
+	int money = 10000;
+	int rage = -1;
 	GameJam game;
 	
 	List<Building> buildings;
@@ -52,8 +52,9 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
+	private int highScore = 0;
 
-
+	
 	public GameScreen(GameJam g)
 	{
 		game = g;
@@ -134,21 +135,44 @@ public class GameScreen implements Screen {
 
         player.update();
 
+        for (Iterator<EnemyBullet> it = enemyBullets.iterator(); it.hasNext(); ) {
+        	EnemyBullet eb = it.next();
+
+        	if(eb.pos.x +16 > player.pos.x && eb.pos.y +32> player.pos.y &&
+        			eb.pos.x < player.pos.x+player.image.getWidth() &&
+        			eb.pos.y < player.pos.y+player.image.getHeight())
+        	{
+        		it.remove();
+        		int tax = -(int)(money*0.10f);
+        		money += tax;
+        		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
+
+        	}
+        }
+
         loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
             b.update();
 
-            for (Building building : buildings)
-                if (building.checkBoundaries(b.pos.x, b.pos.y)) {
-                    building.destroy();
-                    it.remove();
-                    int win = (int)(Math.random()*1000);
-                    money += win;
+            for (Building bldng : buildings)
+                if (bldng.checkBoundaries(b.pos.x, b.pos.y)) {
+                	bldng.destroy();
+            		it.remove();
+            		int win = (int)(Math.random()*1000);
 
-                    moneyFlies.add(new MoneyFly(new Vector2(building.x, building.y), win, fontGreen));
-                    explosions.add(new Explosion(b.pos.x, b.pos.y));
-                    continue loop;
+            		if(!bldng.positive)
+            			win = -win;
+
+            		money += win;
+
+            		if(bldng.positive)
+            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen, false));
+            		else
+            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
+
+            		explosions.add(new Explosion(b.pos.x, b.pos.y));
+            		continue loop;
                 }
 
             if (b.pos.y <= ground.g.getHeight()) {
@@ -185,13 +209,13 @@ public class GameScreen implements Screen {
         font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
 
         player.render(batch);
-
+        
         for(MoneyFly mf : moneyFlies)
 		{
 			mf.update();
 			mf.draw(batch);
 		}
-
+        
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext(); ) {
@@ -219,8 +243,13 @@ public class GameScreen implements Screen {
 
         for (Iterator<MoneyFly> it = moneyFlies.iterator(); it.hasNext();) {
             if(it.next().finished)
-                it.remove();
-        }
+            	it.remove();
+		}
+
+        if(money < highScore )
+        	highScore = money;
+        if(rage>0)
+        	rage--;
     }
 
 
@@ -258,11 +287,18 @@ public class GameScreen implements Screen {
 	{
 		String numString = String.valueOf((long)number);
 		
+		if(number < 0)
+			numString = numString.substring(1, numString.length());
+
 		for(int i = numString.length()-3; i > 0; i -= 3)
 		{
 			numString = numString.substring( 0, i ) + divisor +
 					    numString.substring( i, numString.length());
 		}
+
+		if(number < 0)
+			numString = "-"+numString;
+
 		return numString;
 	}
 
