@@ -280,19 +280,20 @@ public class GameScreen implements Screen {
         	level = 2;
         if(money > 10000)
         	level = 3;
-        if(money > 100000)
-        	level = 4;
-        if(money > 1000000 && enemies.size() <2) {
-            enemies.add(new Enemy(this));
+        if(money > 100000) {
+            level = 4;
+            if (enemies.size()<2) enemies.add(new Enemy(this));
+        }
+        if(money > 1000000) {
             level = 5;
         }
         if(money > 10000000)
         	level = 6;
         if(money > 100000000)
         	level = 7;
-        if(money > 1000000000 && enemies.size() < 3){
+        if(money > 1000000000){
             level = 8;
-            enemies.add(new Enemy(this));
+            if(enemies.size() <3) enemies.add(new Enemy(this));
         }
         if(money > 10000000000L)
         	level = 9;
