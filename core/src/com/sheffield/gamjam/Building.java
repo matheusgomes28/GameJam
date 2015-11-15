@@ -66,7 +66,6 @@ public class Building {
             if ((timeElapsed - lastTime) > interval) {
                 buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
-                //if(interval > 0.2)  interval = interval - 0.1f;
             }
         }
 	}
