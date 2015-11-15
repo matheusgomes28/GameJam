@@ -59,6 +59,10 @@ public class GameScreen implements Screen {
 	public long highScore = 0;
 	public int level = 1;
 
+	final Sound SFX_CASH_GAIN = Gdx.audio.newSound(Gdx.files.local("sounds/coinFalling.ogg"));
+	final Sound SFX_CASH_LOSS = Gdx.audio.newSound(Gdx.files.local("sounds/oinkPig.ogg"));
+	final Sound SFX_LEVEL_UP = Gdx.audio.newSound(Gdx.files.local("sounds/cashRegister.ogg"));
+
 	
 	public GameScreen(GameJam g)
 	{
@@ -111,8 +115,7 @@ public class GameScreen implements Screen {
 				new Tree(t,ground, 6, 2000, 1)};
 
 		// Creating enemies init
-		for(int i = 0; i<1; i++)
-			enemies.add(new Enemy(this));
+		enemies.add(new Enemy(this));
 
         exSounds = new ArrayList<Sound>();
         exSounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/explosion1.wav")));
@@ -154,7 +157,7 @@ public class GameScreen implements Screen {
         		it.remove();
         		int tax = -2*((int)(money*0.05f) - (int)(0.8*Math.pow(10, level)));
         		money += tax;
-        		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
+        		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y), tax, fontRed, true));
 
         	}
         }
@@ -180,10 +183,13 @@ public class GameScreen implements Screen {
 
             		money += win;
 
-            		if(bldng.positive)
-            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen, false));
-            		else
-            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
+            		if(bldng.positive) {
+						moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen, false));
+						SFX_CASH_GAIN.play();
+					} else {
+						moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
+						SFX_CASH_LOSS.play();
+					}
 
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
                     exSounds.get(MathUtils.random(0, exSounds.size()-1)).play(0.2f);
@@ -266,7 +272,7 @@ public class GameScreen implements Screen {
         if(money > highScore )
         	highScore = money;
 
-        if(rage>0)
+        if(rage > 0)
         	rage--;
 
         if(money < 0)
@@ -275,32 +281,20 @@ public class GameScreen implements Screen {
         //win condition
         if(false)
             game.setScreen(game.winScreen);
-        
-        if(money > 1000)
-        	level = 2;
-        if(money > 10000)
-        	level = 3;
-        if(money > 100000) {
-            level = 4;
-            if (enemies.size()<2) enemies.add(new Enemy(this));
+
+        int newLevel = Math.max(1, (int)Math.log10(money) - 1);
+        if (newLevel > level) {
+            level = newLevel;
+            SFX_LEVEL_UP.play();
         }
-        if(money > 1000000) {
-            level = 5;
+        switch(newLevel) {
+            case 4: // £100,000
+                enemies.add(new Enemy(this)); // 2 enemies now
+                break;
+            case 8: // £1,000,000,000
+                enemies.add(new Enemy(this)); // 3 enemies now
+                break;
         }
-        if(money > 10000000)
-        	level = 6;
-        if(money > 100000000)
-        	level = 7;
-        if(money > 1000000000){
-            level = 8;
-            if(enemies.size() <3) enemies.add(new Enemy(this));
-        }
-        if(money > 10000000000L)
-        	level = 9;
-        if(money > 100000000000L)
-        	level = 10;
-        
-        
     }
 
 
