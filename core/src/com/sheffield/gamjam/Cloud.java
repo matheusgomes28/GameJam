@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+
 public class Cloud {
 	
 	private int x, y; // position
@@ -16,10 +17,6 @@ public class Cloud {
 		this.MOVE_SPEED = moveSpeed;
 		this.region = new TextureRegion(region);
 		this.region.setRegion(930, 1805, 203, 133);
-		
-		
-		Random rand = new Random();
-		int num = rand.nextInt(2);
 
 		this.x = xOffSet + Gdx.graphics.getWidth() + region.getRegionWidth()/2;
 		this.y = getY();
