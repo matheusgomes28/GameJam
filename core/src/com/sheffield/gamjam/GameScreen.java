@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 100;
+	long money = 100L;
 	int rage = -1;
 	GameJam game;
 	
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
-	public int highScore = 0;
+	public long highScore = 0;
 	public int level = 1;
 
 	
@@ -152,7 +152,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.05f) - (int)(0.2*Math.pow(10, level));
+        		int tax = -2*((int)(money*0.05f) - (int)(0.8*Math.pow(10, level)));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -186,7 +186,7 @@ public class GameScreen implements Screen {
             			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
 
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
-                    exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
+                    exSounds.get(MathUtils.random(0, exSounds.size()-1)).play(0.2f);
             		continue loop;
                 }
 
@@ -194,7 +194,7 @@ public class GameScreen implements Screen {
                 Vector2 pos = b.pos;
                 it.remove();
                 explosions.add(new Explosion(pos.x, pos.y));
-                exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
+                exSounds.get(MathUtils.random(0, exSounds.size()-1)).play(0.2f);
             }
         }
 
@@ -273,23 +273,36 @@ public class GameScreen implements Screen {
             game.setScreen(game.loseScreen);
 
         //win condition
-        if(money > 1000000000)
+        if(false)
             game.setScreen(game.winScreen);
         
         if(money > 1000)
         	level = 2;
-        if(money > 10000)
+        if(money > 10000) {
         	level = 3;
-        if(money > 100000)
-        	level = 4;
+        	if (enemies.size()<2) enemies.add(new Enemy(this));
+        }
+        if(money > 100000) {
+            level = 4;
+            //if (enemies.size()<2) enemies.add(new Enemy(this));
+        }
         if(money > 1000000)
-        	level = 5;
-        if(money > 10000000)
+            level = 5;
+        if(money > 10000000) {
         	level = 6;
+        	if(enemies.size() <3) enemies.add(new Enemy(this));
+        }
         if(money > 100000000)
         	level = 7;
-        if(money > 1000000000)
-        	level = 8;
+        if(money > 1000000000){
+            level = 8;
+            if(enemies.size() <3) enemies.add(new Enemy(this));
+        }
+        if(money > 10000000000L)
+        	level = 9;
+        if(money > 100000000000L)
+        	level = 10;
+        
         
     }
 

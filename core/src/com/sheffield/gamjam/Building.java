@@ -41,18 +41,17 @@ public class Building {
 
 	
 	public static Building randomBuilding(GameScreen gameScreen) {
-		Random rand = new Random();
 		
 		float prob = 0.1f*gameScreen.level;
 		
 		if(Math.random() > prob)
 		{
-			int num = rand.nextInt(POSITIVE.length-1);
+			int num = (int)Math.round(Math.random()*(POSITIVE.length-1));
 			return new Building(POSITIVE[num], Gdx.graphics.getWidth() + 50, 63, P_WIDTHS[num], P_HEIGHTS[num], true);
 		}
 		else
 		{
-			int num = rand.nextInt(NEGATIVE.length-1);
+			int num = (int)Math.round(Math.random()*(NEGATIVE.length-1));
 			return new Building(NEGATIVE[num], Gdx.graphics.getWidth() + 50, 63, N_WIDTHS[num], N_HEIGHTS[num], false);
 		}
 	}
