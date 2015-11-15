@@ -152,7 +152,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -2*((int)(money*0.05f) - (int)(0.8*Math.pow(10, level)));
+        		int tax = -2*((int)(money*0.05f) + (int)(0.8*Math.pow(10, level)));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -268,13 +268,9 @@ public class GameScreen implements Screen {
 
         if(rage>0)
         	rage--;
-
+        // lose condition
         if(money < 0)
             game.setScreen(game.loseScreen);
-
-        //win condition
-        if(false)
-            game.setScreen(game.winScreen);
         
         if(money > 1000)
         	level = 2;
@@ -284,26 +280,16 @@ public class GameScreen implements Screen {
         }
         if(money > 100000) {
             level = 4;
-            //if (enemies.size()<2) enemies.add(new Enemy(this));
         }
-        if(money > 1000000)
+        if(money > 1000000) {
             level = 5;
-        if(money > 10000000) {
-        	level = 6;
-        	if(enemies.size() <3) enemies.add(new Enemy(this));
-        }
-        if(money > 100000000)
-        	level = 7;
-        if(money > 1000000000){
-            level = 8;
             if(enemies.size() <3) enemies.add(new Enemy(this));
         }
-        if(money > 10000000000L)
-        	level = 9;
-        if(money > 100000000000L)
-        	level = 10;
-        
-        
+        if(money > 10000000) 
+        	level = 6;
+        //win condition
+        if(money > 100000000)
+        	game.setScreen(game.winScreen);     
     }
 
 
