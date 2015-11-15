@@ -34,7 +34,7 @@ public class Building {
     static final int[] N_HEIGHTS = {292,160};
 
     boolean positive;
-    static float interval = 5;
+    static float interval = 3;
     static float lastTime = 0;
 	
 
