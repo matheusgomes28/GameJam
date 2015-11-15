@@ -35,7 +35,7 @@ public class GameScreen implements Screen {
 
 
 	private BitmapFont font12;
-	int money = 0;
+	int money = 1000;
 	GameJam game;
 	
 	List<Building> buildings;
@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
+	private int highScore = 0;
 	
 	
 	public GameScreen(GameJam g)
@@ -111,7 +112,22 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         player.update();
-
+        
+        for (Iterator<EnemyBullet> it = enemyBullets.iterator(); it.hasNext(); ) {
+        	EnemyBullet eb = it.next();
+        	
+        	if(eb.pos.x +16 > player.pos.x && eb.pos.y +32> player.pos.y &&
+        			eb.pos.x < player.pos.x+player.image.getWidth() &&
+        			eb.pos.y < player.pos.y+player.image.getHeight())
+        	{
+        		it.remove();
+        		int tax = (int)(money*0.10f);
+        		money -= tax;
+        		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
+        		
+        	}
+        }
+        
         loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
@@ -122,8 +138,17 @@ public class GameScreen implements Screen {
                 	bldng.destroy();
             		it.remove();
             		int win = (int)(Math.random()*1000);
+            		
+            		if(!bldng.positive)
+            			win = -win;
+            		
             		money += win;
-            		moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen));
+            		
+            		if(bldng.positive)
+            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontGreen, false));
+            		else
+            			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
+            		
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
             		continue loop;
                 }
@@ -185,6 +210,9 @@ public class GameScreen implements Screen {
             if(it.next().finished)
             	it.remove();
 		}
+        
+        if(money < highScore )
+        	highScore = money;
     }
 
 
@@ -222,11 +250,18 @@ public class GameScreen implements Screen {
 	{
 		String numString = String.valueOf((long)number);
 		
+		if(number < 0)
+			numString = numString.substring(1, numString.length());
+		
 		for(int i = numString.length()-3; i > 0; i -= 3)
 		{
 			numString = numString.substring( 0, i ) + divisor +
 					    numString.substring( i, numString.length());
 		}
+		
+		if(number < 0)
+			numString = "-"+numString;
+		
 		return numString;
 	}
 

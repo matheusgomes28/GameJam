@@ -9,21 +9,31 @@ public class MoneyFly {
 	BitmapFont font;
 	Vector2 pos;
 	int amount;
-	boolean finished = false;
+	private int duration;
+	public boolean finished;
+	public boolean stuck;
 	
-	public MoneyFly(Vector2 p, int a, BitmapFont bmf)
+	public MoneyFly(Vector2 p, int a, BitmapFont bmf, boolean stp)
 	{
+		stuck = stp;
+		
 		font = bmf;
 		amount = a;
 		pos = p;
+		
+		duration = 80;
 	}
 	
 	public void update()
 	{
-		pos.y += 2;
-		pos.x -= 7;
+		duration--;
 		
-		if(pos.y > 300)
+		pos.y += 2;
+		
+		if(!stuck)
+			pos.x -= 7;
+		
+		if(duration < 0)
 			finished = true;
 	}
 	
