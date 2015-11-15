@@ -10,7 +10,7 @@ public class Bullet {
 	Vector2 pos;
 	Vector2 vel;
 	Sprite bulletSprite;
-	final float SPEED = 10f;
+	final float SPEED = 15f;
 
 	public Bullet(Texture b, Vector2 p, Vector2 d)
 	{

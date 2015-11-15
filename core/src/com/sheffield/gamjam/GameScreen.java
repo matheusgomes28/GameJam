@@ -7,7 +7,6 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-//import com.badlogic.gdx.backends.lwjgl.audio.Mp3;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,16 +29,19 @@ public class GameScreen implements Screen {
     public Player player;
     public ArrayList<Enemy> enemies;
     public ArrayList<Bullet> bullets;
-	ArrayList<Explosion> explosions;
+    ArrayList<Explosion> explosions;
     ArrayList<EnemyBullet> enemyBullets;
 
 	public Texture bg;
 	public Cloud[] clouds;
 	public Tree[] trees;
 	public Ground ground;
+	public float speed = 1f;
 
     ArrayList<Sound> sounds;
     Sound soundtrack;
+
+    ArrayList<Sound> exSounds;
 
 
 	private BitmapFont font12;
@@ -77,7 +79,7 @@ public class GameScreen implements Screen {
         enemies = new ArrayList<Enemy>();
         bullets = new ArrayList<Bullet>();
         enemyBullets = new ArrayList<EnemyBullet>();
-		explosions = new ArrayList<Explosion>();
+        explosions = new ArrayList<Explosion>();
 		ground = new Ground(Gdx.files.local("ground.png"));
 		
 		FreeTypeFontGenerator gen = 
@@ -111,29 +113,29 @@ public class GameScreen implements Screen {
 		// Creating enemies init
 		for(int i = 0; i<1; i++)
 			enemies.add(new Enemy(this));
-		explosions = new ArrayList<Explosion>();
 
-		explosions = new ArrayList<Explosion>();
+        exSounds = new ArrayList<Sound>();
+        exSounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/explosion1.wav")));
+        exSounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/explosion2.wav")));
+
+
 		shapeRenderer = new ShapeRenderer();
 		buildings = new ArrayList<Building>();
 
 
-        // Creating sounds
-        sounds = new ArrayList<Sound>();
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/disgustedByThePoor.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/gettingPiggyWithIt.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/iveGotLoadsOfMoney.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/readyForClassWar.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/risingFromTheBottomToTheTop.ogg")));
-        sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/sellingTheNhs.ogg")));
+    // Creating sounds
+    sounds = new ArrayList<Sound>();
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/disgustedByThePoor.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/gettingPiggyWithIt.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/iveGotLoadsOfMoney.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/readyForClassWar.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/risingFromTheBottomToTheTop.ogg")));
+    sounds.add(Gdx.audio.newSound(Gdx.files.local("sounds/sellingTheNhs.ogg")));
 
-        soundtrack = Gdx.audio.newSound(Gdx.files.local("sounds/soundtrack.mp3"));
-        soundtrack.loop(0.6f);
-	}
+    soundtrack = Gdx.audio.newSound(Gdx.files.local("sounds/soundtrack.mp3"));
+    soundtrack.loop(0.6f);
+}
 
-    public int get_score(){
-        return this.highScore;
-    }
 
 	@Override
 	public void render(float delta) {
@@ -156,7 +158,12 @@ public class GameScreen implements Screen {
 
         	}
         }
-
+        
+        Building.speed = 7+level;
+        MoneyFly.speed = 7+level;
+        Tree.speed = (7+level)/2;
+        Cloud.speed = (7+level)/2;
+        
         loop:
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
@@ -179,6 +186,7 @@ public class GameScreen implements Screen {
             			moneyFlies.add(new MoneyFly(new Vector2(bldng.x, bldng.y), win, fontRed, false));
 
             		explosions.add(new Explosion(b.pos.x, b.pos.y));
+                    exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
             		continue loop;
                 }
 
@@ -186,6 +194,7 @@ public class GameScreen implements Screen {
                 Vector2 pos = b.pos;
                 it.remove();
                 explosions.add(new Explosion(pos.x, pos.y));
+                exSounds.get(MathUtils.random(0, exSounds.size()-1)).play();
             }
         }
 

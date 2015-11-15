@@ -10,6 +10,8 @@ public class Tree {
     public Ground ground;
     private int move;
     private int x;
+    
+    public static float speed = 0.5f;
 
     public Tree(TextureRegion region, Ground ground, int m, int xOffSet, int choice){
         this.move  = m;
@@ -30,7 +32,7 @@ public class Tree {
     }
 
     public void update(SpriteBatch b){
-        this.x = x-move;
+        this.x = x-(int)speed;
         if(x+g.getRegionWidth() < 0)
             x = Gdx.graphics.getWidth();
         draw(b);

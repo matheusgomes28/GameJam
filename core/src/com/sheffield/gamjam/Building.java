@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Building {
-	static float speed = 7;
+	public static float speed = 7;
 	TextureRegion region;
 	boolean destroyed;
 	Texture building;
@@ -34,7 +34,8 @@ public class Building {
     static final int[] N_HEIGHTS = {292,160};
 
     boolean positive;
-    static float interval = 2;
+    
+    static float interval = 1f;
     static float lastTime = 0;
 	
 
@@ -66,7 +67,7 @@ public class Building {
             if ((timeElapsed - lastTime) > interval) {
                 buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
-                if(interval > 0.6)  interval = interval - 0.1f;
+                if(interval > 0.5)  interval = interval - 0.1f;
             }
         }
     }
@@ -89,7 +90,8 @@ public class Building {
 			}
 		}
 		
-		interval = 1 + 1/gameScreen.level;
+		speed = gameScreen.level;
+		//interval = 1 + 1/gameScreen.level;
 	}
 	
 	Building(Texture buildingTexture, float x, float y, float width, float height, boolean pstv) {
