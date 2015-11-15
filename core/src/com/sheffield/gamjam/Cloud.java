@@ -16,6 +16,7 @@ public class Cloud {
 	public Cloud(TextureRegion region, int moveSpeed, int xOffSet){
 		this.MOVE_SPEED = moveSpeed;
 		this.region = new TextureRegion(region);
+		this.region.setRegion(930, 1805, 203, 133);
 		
 		
 		Random rand = new Random();

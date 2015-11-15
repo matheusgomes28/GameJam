@@ -21,6 +21,8 @@ public class GameJam extends Game {
 	ArrayList<Explosion> explosions;
 	public Cloud[] clouds;
 	public Ground ground;
+	public Tree[] trees;
+    public Texture bg;
 
 	@Override
 	public void create () {
@@ -30,13 +32,21 @@ public class GameJam extends Game {
         player = new Player(this);
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
+
 		ground = new Ground(Gdx.files.local("ground.png"));
 
+        bg = new Texture(Gdx.files.local("bg.png"));
+
 		// Creating clouds with texture region
-		TextureRegion t = new TextureRegion(new Texture(Gdx.files.local("sprite_sheet1.png")), 930, 1805, 203, 133);
-		clouds = new Cloud[]{new Cloud(t, 4, 50),
+		TextureRegion t = new TextureRegion(new Texture(Gdx.files.local("sprite_sheet1.png")));
+		clouds = new Cloud[]{new Cloud(t, 4, 0),
 							  new Cloud(t, 4, 500),
 							  new Cloud(t, 4, 1000)};
+
+		// Creating the trees array
+		trees = new Tree[]{new Tree(t,ground, 6, 50, 1),
+						   new Tree(t,ground, 6, 1000, 0),
+                           new Tree(t,ground, 6, 2000, 1)};
 
 		explosions = new ArrayList<Explosion>();
 
@@ -62,10 +72,13 @@ public class GameJam extends Game {
 
         batch.begin();
 
+        batch.draw(bg, 0,0);
+
 		ground.draw(batch);
 
 		// Updating clouds fam
 		for(Cloud cloud:clouds) cloud.update(batch);
+        for(Tree tree:trees) tree.update(batch);
 
         for(Bullet b : bullets)
         	b.draw(batch);
