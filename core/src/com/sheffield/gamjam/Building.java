@@ -1,5 +1,6 @@
 package com.sheffield.gamjam;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,6 @@ public class Building {
             if ((timeElapsed - lastTime) > interval) {
                 buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
-                //if(interval > 0.2)  interval = interval - 0.1f;
             }
         }
 	}
@@ -109,8 +109,7 @@ public class Building {
 	}
 	
 	public boolean checkBoundaries(float checkX, float checkY) { // checks if a location is with building boundary
-		boolean result = x < checkX && checkX < x+width && y < checkY && checkY < y+height;
-		return result;
+		return (x < checkX) && (checkX < x + width) && (y < checkY) && (checkY < y + height);
 	}
 	
 	public void destroy() {
