@@ -36,23 +36,23 @@ public class Gun {
 		double degrees = Math.toDegrees(Math.atan2(v.y, v.x));
 		
 		gunSprite.setRotation((int)degrees);
-		
+
 		if(Gdx.input.justTouched())
 		{
 			Vector2 dir = v.cpy();
-			
+
 			dir.nor();
-			
+
 			Vector2 gunPos = pos.cpy();
-			
+
 			gunPos.x += 50;
 			gunPos.y += 20;
-			
+
 			gunPos.mulAdd(v, 80);
-			
-			
+
+
 			player.game.bullets.add(new Bullet(bulletTexture, gunPos, v.cpy()));
-			
+
 		}
 	}
 }

@@ -1,15 +1,10 @@
 package com.sheffield.gamjam;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created by Angus on 14/11/2015.
- */
 public class Explosion {
     class Particle {
         public float x, y, radius, dx, dy;

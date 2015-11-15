@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-
 public class Cloud {
 	
 	private int x, y; // position
@@ -46,4 +45,5 @@ public class Cloud {
 		}
 		
 	}
+}
 }
