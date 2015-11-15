@@ -11,7 +11,7 @@ public class LoseScreen extends GameOverScreen {
 
 	@Override
 	public void show(){
-		message =	"  At one point you had " + GameScreen.numFormat((double) gameScreen.highScore, ",") + "\n" +
+		message =	"  At one point you had £" + GameScreen.numFormat((double) gameScreen.highScore, ",") + "\n" +
 				"How could you lose it all? You don't\n" +
 				"deserve to call yourself a dictator\n" +
 				" ... wait I mean prime minister.";

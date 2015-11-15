@@ -35,7 +35,7 @@ public class Building {
 
     boolean positive;
     
-    static float interval = 1f;
+    static float interval = 0.5f;
     static float lastTime = 0;
 	
 
@@ -67,10 +67,10 @@ public class Building {
             if ((timeElapsed - lastTime) > interval) {
                 buildings.add(randomBuilding(gameScreen));
                 lastTime  = timeElapsed;
-                if(interval > 0.5)  interval = interval - 0.1f;
+                //if(interval > 0.2)  interval = interval - 0.1f;
             }
         }
-    }
+	}
 	
 	public static void removeBuildings(List<Building> buildings) {
 		Building firstBuilding = buildings.get(0);
