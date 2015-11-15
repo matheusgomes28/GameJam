@@ -152,7 +152,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.05f) - (int)(0.8*Math.pow(10, level));
+        		int tax = -2*((int)(money*0.05f) - (int)(0.8*Math.pow(10, level)));
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -292,10 +292,6 @@ public class GameScreen implements Screen {
         	level = 8;
         if(money > 10000000000L)
         	level = 9;
-        if(money > 100000000000L)
-        	level = 10;
-        
-        
     }
 
 
