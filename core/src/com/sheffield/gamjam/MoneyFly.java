@@ -8,13 +8,13 @@ public class MoneyFly {
 	
 	BitmapFont font;
 	Vector2 pos;
-	int amount;
+	long amount;
 	private int duration;
 	public boolean finished;
 	public boolean stuck;
 	public static float speed = 1f;
 	
-	public MoneyFly(Vector2 p, int a, BitmapFont bmf, boolean stp)
+	public MoneyFly(Vector2 p, long a, BitmapFont bmf, boolean stp)
 	{
 		stuck = stp;
 		

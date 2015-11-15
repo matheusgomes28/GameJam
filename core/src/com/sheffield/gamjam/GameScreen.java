@@ -176,7 +176,7 @@ public class GameScreen implements Screen {
                 if (bldng.checkBoundaries(b.pos.x, b.pos.y)) {
                 	bldng.destroy();
             		it.remove();
-            		int win = (int)(Math.random()*Math.pow(10, level+1));
+            		long win = (int)(Math.random()*Math.pow(10, level+1));
 
             		if(!bldng.positive)
             			win = -win;
