@@ -18,7 +18,8 @@ public class StartScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 	Ground ground;
 	SpriteBatch batch;
-	BitmapFont font12;
+	BitmapFont bigFont;
+	BitmapFont smallFont;
 	
 	//start button variables
 	float startWidth = 300;
@@ -26,22 +27,26 @@ public class StartScreen implements Screen {
 	float startX = (Gdx.graphics.getWidth() - startWidth)/2;
 	float startY = 550;
 	
-	//instruction button variables
-	float instWidth = 320;
-	float instHeight = 70;
-	float instX = (Gdx.graphics.getWidth() - instWidth)/2;
-	float instY = 400;
+	//instruction string
+	String instructions =	"  You are playing as David Cameron. You must fly around using WASD and\n" +
+							"    shoot rockets at schools, hospitals and houses; cutting unnecessary\n" +
+							"govenment funding and adding it to your pocket. Don't shoot at skyscrapers\n" +
+							"  or banks; you will lose your \"hard-earnt\" money. To make things difficult\n" +
+							"  for you, your enemies are taunting you by throwing bacon at you; try to\n" +
+							" dodge this. Now get out there and amass your fortune, create anarchy and\n" +
+							"end the world as we know it ... mwahahahahahahahahahahahahahahahaha.";
 	
 	public StartScreen(GameJam g)
 	{
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
-		initFont();
+		buttonFont();
+		instructionFont();
 		ground = new Ground(Gdx.files.local("ground.png"));
 		game = g;
 	}
 	
-	private void initFont() {
+	private void buttonFont() {
 		FreeTypeFontGenerator gen = 
 				new FreeTypeFontGenerator(Gdx.files.internal("OpenSans-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -49,7 +54,19 @@ public class StartScreen implements Screen {
 		parameter.color = Color.WHITE;
 		parameter.shadowOffsetY = 1;
 		parameter.shadowOffsetX = 1;
-		font12 = gen.generateFont(parameter);
+		bigFont = gen.generateFont(parameter);
+		gen.dispose();
+	}
+	
+	private void instructionFont() {
+		FreeTypeFontGenerator gen = 
+				new FreeTypeFontGenerator(Gdx.files.internal("OpenSans-Regular.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 25;
+		parameter.color = Color.BLACK;
+		parameter.shadowOffsetY = 1;
+		parameter.shadowOffsetX = 1;
+		smallFont = gen.generateFont(parameter);
 		gen.dispose();
 	}
 	
@@ -70,8 +87,7 @@ public class StartScreen implements Screen {
 			ground.draw(batch);
 			batch.end();
 			renderStartButton();
-			renderInstButton();
-			checkScreenChange();
+			renderInstructions();
 		}
 	}
 	
@@ -95,19 +111,13 @@ public class StartScreen implements Screen {
 		float fontX = startX + 20;
 		float fontY = startY + 55;
 		batch.begin();
-		font12.draw(batch, "Start Game", fontX, fontY);
+		bigFont.draw(batch, "Start Game", fontX, fontY);
 		batch.end();
 	}
 	
-	private void renderInstButton() {
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(0, 1, 0, 1);
-		shapeRenderer.rect(instX, instY, instWidth, instHeight);
-		shapeRenderer.end();
-		float fontX = instX + 25;
-		float fontY = instY + 55;
+	private void renderInstructions() {
 		batch.begin();
-		font12.draw(batch, "Instructions", fontX, fontY);
+		smallFont.draw(batch, instructions, 220, 450);
 		batch.end();
 	}
 
