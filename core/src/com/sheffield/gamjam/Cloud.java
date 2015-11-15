@@ -19,7 +19,6 @@ public class Cloud {
 		
 		
 		Random rand = new Random();
-		int num = rand.nextInt(2);
 
 		this.x = xOffSet + Gdx.graphics.getWidth() + region.getRegionWidth()/2;
 		this.y = getY();
