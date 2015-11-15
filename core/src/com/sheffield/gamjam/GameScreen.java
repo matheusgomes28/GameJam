@@ -289,10 +289,10 @@ public class GameScreen implements Screen {
         }
         switch(newLevel) {
             case 4: // £100,000
-                enemies.add(new Enemy(this)); // 2 enemies now
+                if (enemies.size() < 2) enemies.add(new Enemy(this)); // 2 enemies now
                 break;
             case 8: // £1,000,000,000
-                enemies.add(new Enemy(this)); // 3 enemies now
+                if (enemies.size() < 3) enemies.add(new Enemy(this)); // 3 enemies now
                 break;
         }
     }
