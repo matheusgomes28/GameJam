@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.lwjgl.audio.Mp3;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -52,7 +54,7 @@ public class GameScreen implements Screen {
 	ArrayList<MoneyFly> moneyFlies = new ArrayList<MoneyFly>();
 	private BitmapFont fontGreen;
 	private BitmapFont fontRed;
-	private int highScore = 0;
+	public int highScore = 0;
 
 	
 	public GameScreen(GameJam g)
@@ -128,6 +130,10 @@ public class GameScreen implements Screen {
         soundtrack.loop(0.6f);
 	}
 
+    public int get_score(){
+        return this.highScore;
+    }
+
 	@Override
 	public void render(float delta) {
         Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
@@ -143,7 +149,7 @@ public class GameScreen implements Screen {
         			eb.pos.y < player.pos.y+player.image.getHeight())
         	{
         		it.remove();
-        		int tax = -(int)(money*0.10f);
+        		int tax = -(int)(money*0.10f) - 20;
         		money += tax;
         		moneyFlies.add(new MoneyFly(new Vector2(player.pos.x, player.pos.y),(int) tax, fontRed, true));
 
@@ -246,10 +252,18 @@ public class GameScreen implements Screen {
             	it.remove();
 		}
 
-        if(money < highScore )
+        if(money > highScore )
         	highScore = money;
+
         if(rage>0)
         	rage--;
+
+        if(money < 0)
+            game.setScreen(game.loseScreen);
+
+        //win condition
+        if(money > 50000)
+            game.setScreen(game.winScreen);
     }
 
 

@@ -23,8 +23,17 @@ public class Building {
 	static final Texture BANK	 = new Texture(Gdx.files.internal("bank.png"));
 	static final Texture RUBBLE = new Texture(Gdx.files.internal("rubble.png"));
 	static final Texture[] TEXTURES = {HOSPITAL, SCHOOL, HOUSE, SKYSCRAPER, BANK, RUBBLE};
-	static final int[] WIDTHS = {200, 100, 110, 68, 200};
-	static final int[] HEIGHTS = {150, 150, 100, 292, 160};
+
+    static final Texture[] POSITIVE = {HOSPITAL, SCHOOL, HOUSE};
+    static final Texture[] NEGATIVE = {SKYSCRAPER, BANK};
+
+    static final int[] P_WIDTHS = {200,100,110};
+    static final int[] N_WIDTHS = {68, 200};
+
+    static final int[] P_HEIGHTS = {150,150,100};
+    static final int[] N_HEIGHTS = {292,160};
+
+    boolean positive;
     static float interval = 5;
     static float lastTime = 0;
 	
@@ -52,7 +61,6 @@ public class Building {
 
         } else {
 
-            System.out.println(timeElapsed - lastTime);
             if ((timeElapsed - lastTime) > interval) {
                 buildings.add(randomBuilding());
                 lastTime  = timeElapsed;

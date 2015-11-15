@@ -7,12 +7,14 @@ public class LoseScreen extends GameOverScreen {
 	
 	public LoseScreen(GameJam g, GameScreen gameScreen) {
 		super(g, gameScreen);
-		//highScore = gameScreen.highScore;
-		highScore = 20000;
-		message =	"  At one point you had £" + GameScreen.numFormat(highScore, ",") + "\n" +
-					"How could you lose it all? You don't\n" +
-					"deserve to call yourself a dictator\n" +
-					" ... wait I mean prime minister.";
+	}
+
+	@Override
+	public void show(){
+		message =	"  At one point you had " + GameScreen.numFormat((double) gameScreen.highScore, ",") + "\n" +
+				"How could you lose it all? You don't\n" +
+				"deserve to call yourself a dictator\n" +
+				" ... wait I mean prime minister.";
 	}
 
 	@Override
