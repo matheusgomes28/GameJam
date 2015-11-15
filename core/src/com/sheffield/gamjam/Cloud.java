@@ -29,7 +29,6 @@ public class Cloud {
 		return (int) (Gdx.graphics.getHeight()/2 + Math.random()*(Gdx.graphics.getHeight()/2 - region.getRegionHeight()));
 	}
 	
-	
 	public void draw(SpriteBatch b){
 		b.draw(region, x, y);
 	}

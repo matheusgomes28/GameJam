@@ -1,6 +1,14 @@
 package com.sheffield.gamjam;
 
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameJam extends Game {
 	
@@ -25,11 +33,14 @@ public class GameJam extends Game {
 	public Ground ground;
 	private BitmapFont font12;
 	int money = 0;
+	List<Building> buildings;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		// Creating ground object
+		ground = new Ground(Gdx.files.local("ground.png"));
+		float[] rgb = {0.5f, 1, 0.5f};
 		ground = new Ground(Gdx.files.local("ground.png"));
         player = new Player(this);
         bullets = new ArrayList<Bullet>();
@@ -53,16 +64,22 @@ public class GameJam extends Game {
 		clouds = new Cloud[]{new Cloud(t, 4, 50),
 							  new Cloud(t, 4, 500),
 							  new Cloud(t, 4, 1000)};
-
+		
+		shapeRenderer = new ShapeRenderer();
+		buildings = new ArrayList<Building>();   // <-- include when buildings are wanted or use specific setup
 		explosions = new ArrayList<Explosion>();
 
 		shapeRenderer = new ShapeRenderer();
+		
+		
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		
 
         player.update();
 
@@ -78,9 +95,9 @@ public class GameJam extends Game {
         }
 
         batch.begin();
-
+        
 		ground.draw(batch);
-
+		Building.updateAll(buildings, batch);
 		// Updating clouds fam
 		for(Cloud cloud:clouds) cloud.update(batch);
 
@@ -90,6 +107,8 @@ public class GameJam extends Game {
         font12.draw(batch, "Money: £"+numFormat(money,","), 10, 705);
         
 		player.render(batch);
+        
+        player.render(batch);
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {

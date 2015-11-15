@@ -2,6 +2,7 @@ package com.sheffield.gamjam;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -29,6 +30,8 @@ public class GameScreen implements Screen {
 	private BitmapFont font12;
 	int money = 0;
 	GameJam game;
+	
+	List<Building> buildings;
 	
 	
 	public GameScreen(GameJam g)
@@ -67,6 +70,8 @@ public class GameScreen implements Screen {
 		explosions = new ArrayList<Explosion>();
 
 		shapeRenderer = new ShapeRenderer();
+		
+		buildings = new ArrayList<Building>();
 	}
 
 	@Override
@@ -90,6 +95,8 @@ public class GameScreen implements Screen {
         batch.begin();
 
 		ground.draw(batch);
+		
+		Building.updateAll(buildings, batch);
 
 		// Updating clouds fam
 		for(Cloud cloud:clouds) cloud.update(batch);
