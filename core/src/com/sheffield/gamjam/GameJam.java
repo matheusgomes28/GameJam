@@ -5,15 +5,31 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameJam extends Game {
-	SpriteBatch batch;
+	
+	public StartScreen startScreen;
+	public GameScreen gameScreen;
+
+	@Override
+	public void create() {
+		startScreen = new StartScreen(this);
+		gameScreen = new GameScreen(this);
+		
+		setScreen(startScreen);
+		
+	}
+	/*SpriteBatch batch;
 	ShapeRenderer shapeRenderer;
 
     public Player player;
@@ -21,6 +37,8 @@ public class GameJam extends Game {
 	ArrayList<Explosion> explosions;
 	public Cloud[] clouds;
 	public Ground ground;
+	private BitmapFont font12;
+	int money = 0;
 
 	@Override
 	public void create () {
@@ -31,7 +49,19 @@ public class GameJam extends Game {
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
 		ground = new Ground(Gdx.files.local("ground.png"));
-
+		
+		FreeTypeFontGenerator gen = 
+				new FreeTypeFontGenerator(Gdx.files.internal("OpenSans-Regular.ttf"));
+		
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 50;
+		parameter.color = Color.WHITE;
+		parameter.shadowOffsetY = 1;
+		parameter.shadowOffsetX = 1;
+		font12 = gen.generateFont(parameter);
+		gen.dispose();
+		
+		
 		// Creating clouds with texture region
 		TextureRegion t = new TextureRegion(new Texture(Gdx.files.local("sprite_sheet1.png")), 930, 1805, 203, 133);
 		clouds = new Cloud[]{new Cloud(t, 4, 50),
@@ -56,6 +86,7 @@ public class GameJam extends Game {
             if (b.pos.y <= ground.g.getHeight()) {
                 Vector2 pos = b.pos;
                 it.remove();
+                money += Math.random()*1000;
                 explosions.add(new Explosion(pos.x, pos.y));
             }
         }
@@ -69,7 +100,9 @@ public class GameJam extends Game {
 
         for(Bullet b : bullets)
         	b.draw(batch);
-
+        
+        font12.draw(batch, "Money: £"+numFormat(money,","), 10, 705);
+        
 		player.render(batch);
         batch.end();
 
@@ -83,4 +116,16 @@ public class GameJam extends Game {
 			e.render(shapeRenderer);
 		}
 	}
+	
+	public static String numFormat(double number, String divisor)
+	{
+		String numString = String.valueOf((long)number);
+		
+		for(int i = numString.length()-3; i > 0; i -= 3)
+		{
+			numString = numString.substring( 0, i ) + divisor +
+					    numString.substring( i, numString.length());
+		}
+		return numString;
+	}*/
 }
