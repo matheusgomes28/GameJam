@@ -17,19 +17,19 @@ public class Enemy {
 	final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	final int LEFT_BOUND;
 	float lastShoot = 0;
-	GameJam game;
+	GameScreen game;
 	
-	public Enemy(GameJam g) {
+	public Enemy(GameScreen g) {
         image = new Texture("gent64trans.png");
         bullet = new Texture("bacon-trans.png");
 	    game = g;
-	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-5);
+	    pos = new Vector2(Gdx.graphics.getWidth() + bullet.getWidth()/2, game.ground.g.getHeight()-30);
 	    direction = new Vector2(-2,0);
 	    LEFT_BOUND = 0;
 	}
 	
 	public void render(SpriteBatch batch) {
-	    batch.draw(image, pos.x, pos.y);
+	    batch.draw(image, pos.x, pos.y, 50, 100);
 	    update();
 	}
 	

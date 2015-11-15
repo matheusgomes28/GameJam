@@ -10,10 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Building {
-	static float speed = 2.0f;
+	static float speed = 7;
 	TextureRegion region;
 	boolean destroyed;
 	Texture building;
+	GameScreen game;
 	float x,y, width, height;
 	static final Texture HOSPITAL = new Texture(Gdx.files.internal("hospital.png"));
 	static final Texture SCHOOL = new Texture(Gdx.files.internal("school.png"));
@@ -25,26 +26,12 @@ public class Building {
 	static final int[] WIDTHS = {200, 100, 110, 68, 200};
 	static final int[] HEIGHTS = {150, 150, 100, 292, 160};
 	
-	public static List<Building> setupBuildings(int numBuildings) {
-		List<Building> buildings = new ArrayList<Building>();
-//		Building hospital = new Building(HOSPITAL, 100, 10, 50, 50);
-//		Building school = new Building(SCHOOL, 200, 10, 25, 50);
-//		Building house = new Building(HOUSE, 350, 10, 25, 25);
-//		buildings.add(hospital);
-//		buildings.add(school);
-//		buildings.add(house);
-//		for(int i=1; i<numBuildings; i++) {
-//			Random rand = new Random();
-//			int num = rand.nextInt(TEXTURES.length-1);
-//			buildings.add(new Building(TEXTURES[num], 100, 10, WIDTHS[num], HEIGHTS[num]));
-//		}
-		return buildings;
-	}
+
 	
 	public static Building randomBuilding() {
 		Random rand = new Random();
 		int num = rand.nextInt(TEXTURES.length-1);
-		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 50, WIDTHS[num], HEIGHTS[num]);
+		return new Building(TEXTURES[num], Gdx.graphics.getWidth() + 50, 63, WIDTHS[num], HEIGHTS[num]);
 	}
 	
 	public static void addNewBuilding(List<Building> buildings) {
@@ -66,7 +53,7 @@ public class Building {
 			buildings.remove(0);
 		}
 	}
-	
+
 	public static void updateAll(List<Building> buildings, SpriteBatch batch) {
 		addNewBuilding(buildings);
 		removeBuildings(buildings);
@@ -77,16 +64,6 @@ public class Building {
 			}
 		}
 	}
-	
-//	Building(Texture buildingTexture) {
-//		destroyed = false; // change to false for actual
-//		rubble = RUBBLE;
-//		building = buildingTexture;
-//		x = 10;
-//		y = 10;
-//		width = 200;
-//		height = 200;
-//	}
 	
 	Building(Texture buildingTexture, float x, float y, float width, float height) {
 		destroyed = false;

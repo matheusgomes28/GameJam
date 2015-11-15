@@ -23,10 +23,17 @@ public class GameScreen implements Screen {
 	ShapeRenderer shapeRenderer;
 
     public Player player;
+    public ArrayList<Enemy> enemies;
     public ArrayList<Bullet> bullets;
 	ArrayList<Explosion> explosions;
+    ArrayList<EnemyBullet> enemyBullets;
+
+	public Texture bg;
 	public Cloud[] clouds;
+	public Tree[] trees;
 	public Ground ground;
+
+
 	private BitmapFont font12;
 	int money = 0;
 	GameJam game;
@@ -42,10 +49,17 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
+
+
 		// Creating ground object
 		ground = new Ground(Gdx.files.local("ground.png"));
+		bg = new Texture(Gdx.files.local("bg.png"));
+
+
         player = new Player(this);
+        enemies = new ArrayList<Enemy>();
         bullets = new ArrayList<Bullet>();
+        enemyBullets = new ArrayList<EnemyBullet>();
 		explosions = new ArrayList<Explosion>();
 		ground = new Ground(Gdx.files.local("ground.png"));
 		
@@ -67,35 +81,42 @@ public class GameScreen implements Screen {
 							  new Cloud(t, 4, 500),
 							  new Cloud(t, 4, 1000)};
 
+		// Creating the trees array
+		trees = new Tree[]{new Tree(t,ground, 6, 50, 1),
+				new Tree(t,ground, 6, 1000, 0),
+				new Tree(t,ground, 6, 2000, 1)};
+
+		// Creating enemies init
+		for(int i = 0; i<1; i++)
+			enemies.add(new Enemy(this));
 		explosions = new ArrayList<Explosion>();
 
+		explosions = new ArrayList<Explosion>();
 		shapeRenderer = new ShapeRenderer();
-		
 		buildings = new ArrayList<Building>();
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         player.update();
-        
+
         loop:
-        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext();) {
+        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
             Bullet b = it.next();
             b.update();
-            
-            for(Building bldng : buildings)
-            	if(bldng.checkBoundaries(b.pos.x, b.pos.y))
-            	{
-            		bldng.destroy();
-            		it.remove();
-            		money += Math.random()*1000;
-            		explosions.add(new Explosion(b.pos.x, b.pos.y));
-            		continue loop;
-            	}
-            
+
+            for (Building building : buildings)
+                if (building.checkBoundaries(b.pos.x, b.pos.y)) {
+                    building.destroy();
+                    it.remove();
+                    money += Math.random() * 1000;
+                    explosions.add(new Explosion(b.pos.x, b.pos.y));
+                    continue loop;
+                }
+
             if (b.pos.y <= ground.g.getHeight()) {
                 Vector2 pos = b.pos;
                 it.remove();
@@ -104,32 +125,45 @@ public class GameScreen implements Screen {
         }
 
         batch.begin();
+        batch.draw(bg, 0, 0);
+        ground.draw(batch);
 
-		ground.draw(batch);
-		
-		Building.updateAll(buildings, batch);
 
-		// Updating clouds fam
-		for(Cloud cloud:clouds) cloud.update(batch);
+        // Updating clouds fam
+        for (Cloud cloud : clouds) cloud.update(batch);
+        for (Tree tree : trees) tree.update(batch);
 
-        for(Bullet b : bullets)
-        	b.draw(batch);
-        
-        font12.draw(batch, "Money: £"+numFormat(money,","), 10, 705);
-        
-		player.render(batch);
+        Building.updateAll(buildings, batch);
+
+        for (Bullet b : bullets)
+            b.draw(batch);
+
+        // Render enemy's bullets
+        for (EnemyBullet eb : enemyBullets) {
+            eb.update();
+            eb.draw(batch);
+        }
+
+        // Render enemies
+        for (Enemy e : enemies)
+            e.render(batch);
+
+        font12.draw(batch, "Money: £" + numFormat(money, ","), 10, 705);
+
+        player.render(batch);
         batch.end();
 
-        for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {
+        for (Iterator<Explosion> it = explosions.iterator(); it.hasNext(); ) {
             Explosion e = it.next();
-			boolean doDelete = e.update(1.0f / 60.0f);
+            boolean doDelete = e.update(1.0f / 60.0f);
             if (doDelete) {
                 it.remove();
                 continue;
             }
-			e.render(shapeRenderer);
-		}
-	}
+            e.render(shapeRenderer);
+        }
+    }
+
 
 	@Override
 	public void resize(int width, int height) {

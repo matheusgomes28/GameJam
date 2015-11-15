@@ -24,7 +24,9 @@ public class Tree {
     }
 
     public void draw(SpriteBatch b){
-        b.draw(g, x, ground.g.getHeight());
+        b.setColor(1, 1, 1, 0.8f);
+        b.draw(g, x, ground.g.getHeight(), 100, 150);
+        b.setColor(1,1,1,1);
     }
 
     public void update(SpriteBatch b){
