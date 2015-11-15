@@ -2,12 +2,16 @@ package com.sheffield.gamjam;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameJam extends Game {
 	SpriteBatch batch;
@@ -18,13 +22,14 @@ public class GameJam extends Game {
 	ArrayList<Explosion> explosions;
 	public Cloud[] clouds;
 	public Ground ground;
+	List<Building> buildings;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		// Creating ground object
 		float[] rgb = {0.5f, 1, 0.5f};
-		ground = new Ground(rgb, 100, 20);
+		ground = new Ground(Gdx.files.local("ground.png"));
         player = new Player(this);
         bullets = new ArrayList<Bullet>();
 		explosions = new ArrayList<Explosion>();
@@ -35,22 +40,26 @@ public class GameJam extends Game {
 		clouds = new Cloud[]{new Cloud(t, 3, 50),
 							  new Cloud(t, 3, 500),
 							  new Cloud(t, 3, 1000)};
-
+		
+		shapeRenderer = new ShapeRenderer();
+		buildings = new ArrayList<Building>();   // <-- include when buildings are wanted or use specific setup
 		explosions = new ArrayList<Explosion>();
+		
+		
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0.4f, 0.4f, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		ground.draw();
+		
 
         player.update();
 
         for (Iterator<Bullet> it = bullets.iterator(); it.hasNext();) {
             Bullet b = it.next();
             b.update();
-            if (b.pos.y <= ground.height) {
+            if (b.pos.y <= ground.g.getHeight()) {
                 Vector2 pos = b.pos;
                 it.remove();
                 explosions.add(new Explosion(pos.x, pos.y));
@@ -58,14 +67,16 @@ public class GameJam extends Game {
         }
 
         batch.begin();
-
+        
 		ground.draw(batch);
-
+		Building.updateAll(buildings, batch);
 		// Updating clouds fam
 		for(Cloud cloud:clouds) cloud.update(batch);
 
         for(Bullet b : bullets)
         	b.draw(batch);
+        
+        player.render(batch);
         batch.end();
 
         for (Iterator<Explosion> it = explosions.iterator(); it.hasNext();) {

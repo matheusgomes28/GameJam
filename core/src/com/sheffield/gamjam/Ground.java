@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Ground{
 	
 	// Variables we need for the ground stuff
-	private Texture g;
+	public Texture g;
 	
 	// The constructor we'll need 
 	public Ground(FileHandle f){
